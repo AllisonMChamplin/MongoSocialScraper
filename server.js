@@ -31,18 +31,17 @@ mongoose.connect("mongodb://localhost/mongoSocialScraper", { useNewUrlParser: tr
 
 // Routes
 
+// Scrape echoJS
 // A GET route for scraping the echoJS website
 app.get("/scrape", function (req, res) {
     // First, we grab the body of the html with axios
     axios.get("http://www.echojs.com/").then(function (response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
-
         // Now, we grab every h2 within an article tag, and do the following:
         $("article h2").each(function (i, element) {
             // Save an empty result object
             var result = {};
-
             // Add the text and href of every link, and save them as properties of the result object
             result.title = $(this)
                 .children("a")
@@ -50,7 +49,6 @@ app.get("/scrape", function (req, res) {
             result.link = $(this)
                 .children("a")
                 .attr("href");
-
             // Create a new Article using the `result` object built from scraping
             db.Article.create(result)
                 .then(function (dbArticle) {
@@ -62,12 +60,12 @@ app.get("/scrape", function (req, res) {
                     console.log(err);
                 });
         });
-
         // Send a message to the client
         res.send("Scrape Complete");
     });
 });
 
+// echoJS ARTICLES
 // Route for getting all Articles from the db
 app.get("/articles", function (req, res) {
     // Grab every document in the Articles collection
@@ -117,6 +115,91 @@ app.post("/articles/:id", function (req, res) {
             res.json(err);
         });
 });
+
+
+
+
+// Scrape shape.com
+// A GET route for scraping a recipe website
+app.get("/scrape-recipes", function (req, res) {
+    console.log("wtf");
+    // First, we grab the body of the html with axios
+    axios.get("https://www.shape.com/healthy-eating/healthy-recipes/vegetarian-keto-recipes").then(function (response) {
+        console.log("yo");
+        var $ = cheerio.load(response.data);
+        $("div h3").each(function (i, element) {
+            var result = {};
+            result.title = $(this).text();
+
+            // Create a new Recipe using the `result` object built from scraping
+            db.Recipe.create(result)
+                .then(function (dbRecipe) {
+                    // View the added result in the console
+                    console.log(dbRecipe);
+                })
+                .catch(function (err) {
+                    // If an error occurred, log it
+                    console.log(err);
+                });
+        });
+        // Send a message to the client
+        res.send("Recipe Scrape Complete");
+    });
+});
+
+// RECIPES
+// Route for getting all Recipes from the db
+app.get("/recipes", function (req, res) {
+    // Grab every document in the Recipes collection
+    db.Recipe.find({})
+        .then(function (dbRecipe) {
+            // If we were able to successfully find Recipes, send them back to the client
+            res.json(dbRecipe);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+// Route for grabbing a specific Recipe by id, populate it with it's note
+app.get("/recipes/:id", function (req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    db.Recipe.findOne({ _id: req.params.id })
+        // ..and populate all of the notes associated with it
+        .populate("note")
+        .then(function (dbRecipe) {
+            // If we were able to successfully find an Recipe with the given id, send it back to the client
+            res.json(dbRecipe);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+// Route for saving/updating an Recipe's associated Note
+app.post("/recipes/:id", function (req, res) {
+    // Create a new note and pass the req.body to the entry
+    db.Note.create(req.body)
+        .then(function (dbNote) {
+            // If a Note was created successfully, find one Recipe with an `_id` equal to `req.params.id`. Update the Recipe to be associated with the new Note
+            // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+            // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+            return db.Recipe.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+        })
+        .then(function (dbRecipe) {
+            // If we were able to successfully update an Recipe, send it back to the client
+            res.json(dbRecipe);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
+
+
 
 // Start the server
 app.listen(PORT, function () {
