@@ -1,7 +1,7 @@
 body {
     background-color: #222222;
     font-family: 'Open Sans', sans-serif;
-    color: #444;
+    color: #666;
 }
 
 h1, h2, h3, h4, h5 {
@@ -73,14 +73,20 @@ textarea {
 }
 
 #left nav a, #left nav a:visited {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #444444;
     display: block;
     padding: 8px 0;
-    color: #c56293;
+    color: #7c5266;
     text-decoration: none;
+    -webkit-transition-property: -webkit-padding-left; /* Safari */
+    -webkit-transition-duration: 1s; /* Safari */
+    transition-property: padding-left;
+    transition-duration: 1s;
 }
 
 #left nav a:hover {
     text-decoration: none;
-    border-bottom: 1px solid #c56293;
+    border-bottom: 1px solid #7c5266;
+    padding-left: 20px;
 }
+
