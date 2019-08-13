@@ -5,6 +5,14 @@ body {
     font-size: 1.2em;
 }
 
+a, a:visited {
+    color: #4f6673;
+}
+
+a:hover {
+    color: #ccc;
+}
+
 h1, h2, h3, h4, h5 {
     font-family: 'Open Sans', sans-serif;
     /* color: #fff; */

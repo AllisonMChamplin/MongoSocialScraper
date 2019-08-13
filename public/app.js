@@ -2,6 +2,8 @@ $(document).ready(function () {
 
   var articlesDiv = $("#articles");
 
+  var selectMenuOptionState;
+
   // Initialize SelectMenu
   $(function () {
     $("#sites").selectmenu();
@@ -9,6 +11,7 @@ $(document).ready(function () {
 
   $('#sites').on('selectmenuchange', function () {
     var v = $(this).val();
+    selectMenuOptionState = $(this).val();    
     console.log("v: ", $(this).val());
 
     if (v) {
@@ -20,7 +23,8 @@ $(document).ready(function () {
           // For each one
           for (var i = 0; i < data.length; i++) {
             // Display the apropos information on the page
-            articlesDiv.append("<p data-id='" + data[i]._id + "'>" + "<a href='" + data[i].link + "' target='_blank'>" + data[i].title + "</a>" + "<br /></p>");
+            // articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br><a href='" + data[i].link + "' target='_blank'>Link</a>" + "<br /></p>");
+            articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br></p>");
           }
         }
       });
@@ -50,7 +54,8 @@ $(document).ready(function () {
     // Now make an ajax call for the Article
     $.ajax({
       method: "GET",
-      url: "/articles/" + thisId
+      // url: "/articles/" + thisId
+      url: selectMenuOptionState + "/" + thisId      
     })
       // With that done, add the note information to the page
       .then(function (data) {
