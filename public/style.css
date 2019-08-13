@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(88, 88, 88);
+    background-color: #222222;
     font-family: 'Open Sans', sans-serif;
     color: #444;
 }
@@ -49,7 +49,7 @@ textarea {
 }
 
 .drop-shadow {
-    background: #fff;
+    background: #222222;
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
@@ -76,11 +76,11 @@ textarea {
     border-bottom: 1px solid #ccc;
     display: block;
     padding: 8px 0;
-    color: #2aa48d;
+    color: #c56293;
     text-decoration: none;
 }
 
 #left nav a:hover {
     text-decoration: none;
-    border-bottom: 1px solid #2aa48d;
+    border-bottom: 1px solid #c56293;
 }
