@@ -95,3 +95,15 @@ textarea {
     background: #222222;
     border: 1px solid #333;
 }
+
+/* jQuery UI Select Menu */
+fieldset {
+    border: 0;
+  }
+  label {
+    display: block;
+    margin: 30px 0 0 0;
+  }
+  .overflow {
+    height: 200px;
+  }
