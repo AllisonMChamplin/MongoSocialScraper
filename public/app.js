@@ -2,37 +2,82 @@ $(document).ready(function () {
 
   var articlesDiv = $("#articles");
 
-  var selectMenuOptionState;
+  var pageState = 0;
 
-  // Initialize SelectMenu
+  var pageStateDiv = $('#page-state');
+  pageStateDiv.text(pageState);
+
   $(function () {
-    $("#sites").selectmenu();
-  });
-
-  $('#sites').on('selectmenuchange', function () {
-    var v = $(this).val();
-    selectMenuOptionState = $(this).val();    
-    console.log("v: ", $(this).val());
-
-    if (v) {
-      // Grab the articles as a json
-      $.getJSON(v, function (data) {
-        if (data) {
-          // Clear the div
-          articlesDiv.empty();
-          // For each one
-          for (var i = 0; i < data.length; i++) {
-            // Display the apropos information on the page
-            // articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br><a href='" + data[i].link + "' target='_blank'>Link</a>" + "<br /></p>");
-            articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br></p>");
-          }
+    $("#menu").menu(
+      {
+        classes: {
+          "ui-menu": "unstyled"
         }
-      });
-    }
+      }
+    );
+  });
+
+  $('.content-link').on("click", function (event) {
+
+    var state = $(this).attr("data-pageState");
+    console.log("state: ", state);
+    pageState = state;
+    console.log("pageState: ", pageState);
+
+    var categoryName = $(this).attr("data-categoryName");
+    console.log("categoryName: ", categoryName);
+
+    pageStateDiv.html(pageState + " " + categoryName);
+
+    refreshContent(pageState, categoryName);
 
   });
 
+  var selectDiv = $('<div id="select-div">');
 
+  var refreshContent = function (pageState, categoryName) {
+    console.log("pageState is: ", pageState);
+    if (pageState == 1 || pageState == 2 || pageState == 3) {
+      selectDiv.empty();
+      selectDiv.text(categoryName);
+      articlesDiv.prepend(selectDiv);
+    }
+  };
+
+  var initializeContent = function (pageState) {
+    if (pageState === 0) {
+      selectDiv.text("Instructions: select a topic in the left menu.");
+      articlesDiv.prepend(selectDiv);
+    }
+  };
+
+  initializeContent(0);
+
+  // var selectMenuOptionState;
+  // // Initialize SelectMenu
+  // $(function () {
+  //   $("#sites").selectmenu();
+  // });
+  // $('#sites').on('selectmenuchange', function () {
+  //   var v = $(this).val();
+  //   selectMenuOptionState = $(this).val();
+  //   console.log("v: ", $(this).val());
+  //   if (v) {
+  //     // Grab the articles as a json
+  //     $.getJSON(v, function (data) {
+  //       if (data) {
+  //         // Clear the div
+  //         articlesDiv.empty();
+  //         // For each one
+  //         for (var i = 0; i < data.length; i++) {
+  //           // Display the apropos information on the page
+  //           // articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br><a href='" + data[i].link + "' target='_blank'>Link</a>" + "<br /></p>");
+  //           articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br></p>");
+  //         }
+  //       }
+  //     });
+  //   }
+  // });
 
   // // Grab the articles as a json
   // $.getJSON("/articles", function (data) {
@@ -55,7 +100,7 @@ $(document).ready(function () {
     $.ajax({
       method: "GET",
       // url: "/articles/" + thisId
-      url: selectMenuOptionState + "/" + thisId      
+      url: selectMenuOptionState + "/" + thisId
     })
       // With that done, add the note information to the page
       .then(function (data) {

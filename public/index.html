@@ -20,10 +20,14 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <!-- jQuery UI CSS -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" type="text/css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato|Roboto&display=swap" rel="stylesheet">
 
     <title>Scraping With Mongoose</title>
 </head>
@@ -36,19 +40,86 @@
         <div id="articles"></div>
         <div id="notes"></div>
     </div> -->
+    <!-- <div class="hello">Hello</div> -->
 
     <div class="container">
         <div class="row">
+            <div class="col">
+                Page State: <span id="page-state"></span>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-3" id="left">
-                <div class="container card-wrap my-5 p-4">
-                    <span class="welcome">Recipe Scraper</span>
+                <div class="container card-wrap my-5 p-4 drop-shadow">
+                    <span class="welcome">Recipe Planner</span>
                     <small>Scrape some new food ideas!</small>
                     <nav>
+                        <ul id="menu">
+                            <li>
+                                <div class="content-link" data-pageState=1 data-categoryName="Vegan Recipes">Vegan Recipes</div>
+                            </li>
+                            <li>
+                                <div class="content-link" data-pageState=2 data-categoryName="Keto Recipes">Keto Recipes</div>
+                            </li>
+                            <li>
+                                <div class="content-link" data-pageState=3 data-categoryName="Vegan-Keto Recipes">Vegan-Keto Recipes</div>
+                            </li>
+                            <!-- <li>
+                                <div>Electronics</div>
+                                <ul>
+                                    <li>
+                                        <div>Car Hifi</div>
+                                    </li>
+                                    <li>
+                                        <div>Utilities</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div>Movies</div>
+                            </li>
+                            <li>
+                                <div>Music</div>
+                                <ul>
+                                    <li>
+                                        <div>Rock</div>
+                                        <ul>
+                                            <li>
+                                                <div>Alternative</div>
+                                            </li>
+                                            <li>
+                                                <div>Classic</div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div>Jazz</div>
+                                        <ul>
+                                            <li>
+                                                <div>Freejazz</div>
+                                            </li>
+                                            <li>
+                                                <div>Big Band</div>
+                                            </li>
+                                            <li>
+                                                <div>Modern</div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li> -->
+                        </ul>
+
+
+
+
+
+                        <!--                         
                         <ul class="">
                             <li class="nav-item">
                                 <a href="#page-top">Home</a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a href="/scrape">Scrape JS</a>
                                 <a href="/articles">Articles</a>
                             </li>
@@ -59,13 +130,13 @@
                             <li class="nav-item">
                                 <a href="#">Contact</a>
                             </li>
-                        </ul>
+                        </ul> -->
                     </nav>
                 </div>
             </div>
 
             <div class="col-sm-6" id="main">
-                <form action="#">
+                <!-- <form action="#">
                     <fieldset>
                         <label for="sites">Select a source</label>
                         <select name="sites" id="sites">
@@ -73,11 +144,10 @@
                             <option value="/articles">Code Articles</option>
                         </select>
                     </fieldset>
-                </form>
+                </form> -->
                 <div class="container card-wrap my-5 p-4">
                     <div class="row">
                         <div class="col" id="articles">
-                            <h3>Articles</h3>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,18 @@
-body {
+html {
+    scroll-behavior: smooth;
+}
+
+/* body {
     background-color: #222222;
     font-family: 'Open Sans', sans-serif;
+    color: #666;
+    font-size: 1.2em;
+} */
+
+
+body {
+    background-color: #ccc;
+    font-family: 'Roboto', sans-serif;
     color: #666;
     font-size: 1.2em;
 }
@@ -14,7 +26,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5 {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     /* color: #fff; */
 }
 
@@ -58,7 +70,7 @@ textarea {
 }
 
 .drop-shadow {
-    background: #222222;
+    background: #333;
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0px rgba(0, 0, 0, 0.1) inset;
@@ -88,9 +100,9 @@ textarea {
     color: #7c5266;
     text-decoration: none;
     -webkit-transition-property: -webkit-padding-left; /* Safari */
-    -webkit-transition-duration: 1s; /* Safari */
+    -webkit-transition-duration: .5s; /* Safari */
     transition-property: padding-left;
-    transition-duration: 1s;
+    transition-duration: .5s;
 }
 
 #left nav a:hover {
@@ -100,18 +112,45 @@ textarea {
 }
 
 .card-wrap {
-    background: #222222;
-    border: 1px solid #333;
+    background: #dddddd;
+    border: 1px solid #fff;
 }
 
 /* jQuery UI Select Menu */
 fieldset {
     border: 0;
-  }
-  label {
+}
+
+label {
     display: block;
     margin: 30px 0 0 0;
-  }
-  .overflow {
+}
+
+.overflow {
     height: 200px;
-  }
+}
+
+#left .card-wrap {
+    border-top-left-radius: 10px;
+}
+
+#right .card-wrap {
+    border-top-right-radius: 10px;
+}
+
+/* Left Nav */
+.unstyled { 
+    width: 100%; 
+    background: #ccc;
+    border: 0 !important;
+    font-size: .9em;
+};
+
+.unstyled a {
+    color: #666;
+}
+
+.unstyled.ui.state.active {
+    background: red;
+}
+
