@@ -154,3 +154,14 @@ label {
     background: red;
 }
 
+
+/* Articles List View */
+.art {
+    border: 1px solid #fff;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+.art img {
+    width: 100%;
+}

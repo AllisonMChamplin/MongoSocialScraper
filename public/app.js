@@ -1,7 +1,10 @@
 $(document).ready(function () {
 
   var articlesDiv = $("#articles");
+  var contentTitleDiv = $('#content-title');
+
   var selectDiv = $('<div id="select-div">');
+
   var pageState = 0;
   var pageStateDiv = $('#page-state');
   pageStateDiv.text(pageState);
@@ -23,7 +26,7 @@ $(document).ready(function () {
   var refreshContent = function (pageState, categoryName, scrapeURL) {
     if (pageState == 0) {
       selectDiv.text("Instructions: select a topic in the left menu.");
-      articlesDiv.prepend(selectDiv);
+      contentTitleDiv.prepend(selectDiv);
     } else if (pageState == 1 || pageState == 2 || pageState == 3) {
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
       scrapeButton.val(scrapeURL);
@@ -31,14 +34,14 @@ $(document).ready(function () {
       selectDiv.empty();
       selectDiv.html("<h3>" + categoryName + "</h3><br>");
       selectDiv.append(scrapeButton);
-      articlesDiv.prepend(selectDiv);
+      contentTitleDiv.prepend(selectDiv);
     }
   };
 
   var initializeContent = function (pageState) {
     if (pageState === 0) {
       selectDiv.text("Instructions: select a topic in the left menu.");
-      articlesDiv.prepend(selectDiv);
+      contentTitleDiv.prepend(selectDiv);
     }
   };
 
@@ -54,17 +57,30 @@ $(document).ready(function () {
     refreshContent(pageState, categoryName, scrapeURL);
   });
 
-  $('div#articles').on("click", ".scrape-button", function (event) {
+  contentTitleDiv.on("click", ".scrape-button", function (event) {
     console.log("Scrapy");
-    var v = $(this).val();
-    console.log("v: ", v);
+    var scrapeURL = $(this).val();
+    console.log("scrapeURL: ", scrapeURL);
 
-    $.getJSON(v, function (json) {
+    $.getJSON(scrapeURL, function (json) {
       if (json) {
-        //Display
-        console.log("json: ", json);
+        // console.log("json: ", json);
+
+        articlesDiv.empty();
+        for (let i = 0; i < json.length; i++) {
+          // console.log("json: ", json[i].title);
+          var articleWrap = $('<div class="art">');
+          var articleTitle = json[i].title;
+          var articleLink = json[i].link;
+          var articleImg = json[i].img;
+
+          articleWrap.html("<h6>" + articleTitle + "</h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
+          
+          articlesDiv.append(articleWrap);
+        }
       }
     });
+
   });
 
 
