@@ -93,7 +93,7 @@ textarea {
     margin-top: 24px;
 }
 
-#left nav a, #left nav a:visited {
+.content-link, .content-link:visited {
     border-bottom: 1px solid #444444;
     display: block;
     padding: 8px 0;
@@ -103,13 +103,26 @@ textarea {
     -webkit-transition-duration: .5s; /* Safari */
     transition-property: padding-left;
     transition-duration: .5s;
+    padding-left: 5px;
 }
 
-#left nav a:hover {
+.content-link:hover {
     text-decoration: none;
-    border-bottom: 1px solid #7c5266;
-    padding-left: 20px;
+    /* border-bottom: 1px solid #7c5266; */
+    padding-left: 10px;
 }
+
+.content-link.active {
+    background: #fff;
+    text-decoration: none;
+    /* border-bottom: 1px solid #7c5266; */
+    padding-left: 10px;
+}
+
+/* End Left Nav */
+
+
+
 
 .card-wrap {
     background: #ccc;
@@ -129,6 +142,8 @@ label {
 .overflow {
     height: 200px;
 }
+/* End select menu */
+
 
 #left .card-wrap {
     border-top-left-radius: 10px;
@@ -138,29 +153,7 @@ label {
     border-top-right-radius: 10px;
 }
 
-/* Left Nav */
-.unstyled { 
-    width: 100%; 
-    background: #ccc;
-    border: 0 !important;
-    font-size: .9em;
-};
 
-.unstyled a {
-    color: #666;
-}
-
-.unstyled.ui.state.active {
-    background: #fff;
-}
-
-.unstyled .content-link {
-    padding-left: 10px;
-}
-
-.unstyled .content-link.active {
-    background: #fff;
-}
 /* Articles List View */
 .art {
     border: 1px solid #fff;

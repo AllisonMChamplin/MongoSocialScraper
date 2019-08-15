@@ -33,7 +33,7 @@ $(document).ready(function () {
       selectDiv.text("Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
     // $(this).addClass("active");
-    // $( "div span:first-child" )
+    $( "#menu li:first-child a" ).addClass("active");
     }
   };
 
