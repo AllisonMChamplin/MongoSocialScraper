@@ -108,6 +108,8 @@ $(document).ready(function () {
         for (let i = 0; i < data.length; i++) {
           // console.log("data: ", data[i]);
           var articleWrap = $('<div class="art">');
+          console.log("data[i].id", data[i]._id);
+          articleWrap.attr("data-id", data[i]._id);
           var articleTitle = data[i].title;
           var articleLink = data[i].link;
           var articleImg = data[i].img;
