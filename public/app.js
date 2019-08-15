@@ -2,30 +2,19 @@ $(document).ready(function () {
 
   var articlesDiv = $("#articles");
   var contentTitleDiv = $('#content-title');
-
   var selectDiv = $('<div id="select-div">');
-
   var pageState = 0;
   var pageStateDiv = $('#page-state');
   pageStateDiv.text(pageState);
 
-  $(function () {
-    $("#menu").menu(
-      {
-        classes: {
-          "ui-menu": "unstyled"
-        }
-      }
-    );
-  });
+  var progressStateDiv = $('<div id="progress-state">');
+  progressStateDiv.text(" ");
 
-  $(function () {
-    $("#dialog").dialog();
-  });
 
   var refreshContent = function (pageState, categoryName, scrapeURL) {
     if (pageState == 0) {
-      selectDiv.text("Instructions: select a topic in the left menu.");
+      selectDiv.empty();
+      selectDiv.html("<h3>" + categoryName + "</h3><br>Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
     } else if (pageState == 1 || pageState == 2 || pageState == 3) {
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
@@ -35,6 +24,7 @@ $(document).ready(function () {
       selectDiv.html("<h3>" + categoryName + "</h3><br>");
       selectDiv.append(scrapeButton);
       contentTitleDiv.prepend(selectDiv);
+      contentTitleDiv.append(progressStateDiv);
     }
   };
 
@@ -42,31 +32,39 @@ $(document).ready(function () {
     if (pageState === 0) {
       selectDiv.text("Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
+    // $(this).addClass("active");
+    // $( "div span:first-child" )
     }
   };
 
   initializeContent(0);
 
-  // Click Handlers
+  // Click Handler for left nav
   $('.content-link').on("click", function (event) {
+    console.log("Clicky left nav");
 
     $(".content-link.active").removeClass("active");
-
     $(this).addClass("active");
 
+    $(".scrape-button").remove();
+    $("#articles").empty();
 
-    $('nav').find("a.content-link")
-    $(this).addClass("active");
+    // $('nav').find("a.content-link");
     var state = $(this).attr("data-pageState");
     pageState = state;
     var categoryName = $(this).attr("data-categoryName");
     var scrapeURL = $(this).attr("data-scrapeURL");
     pageStateDiv.html(pageState + " " + categoryName + " " + scrapeURL);
+    progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
+    progressStateDiv.text(" ");
     refreshContent(pageState, categoryName, scrapeURL);
   });
 
+  // Click handler for scrape button
   contentTitleDiv.on("click", ".scrape-button", function (event) {
-    console.log("Clicky");
+    console.log("Clicky scrape button");
+    progressStateDiv.addClass("alert");
+    progressStateDiv.text("Scraping in progress...");
 
     var scrapeURL = $(this).val();
 
@@ -74,26 +72,64 @@ $(document).ready(function () {
     $(this).addClass("disabled");
     $(this).attr("disabled", "disabled");
 
-    $.getJSON(scrapeURL, function (json) {
-      if (json) {
-        console.log("json: ", json);
+    $.getJSON(scrapeURL, function (data, status) {
+      if (data.length > 0) {
+        progressStateDiv.addClass("alert-success");
+        progressStateDiv.text("Success! Scraping complete!");
+        console.log("data: ", data);
+        console.log("data.length: ", data.length);
+        console.log("Status: ", status);
+        if (data[0].batchId) {
+          console.log("batchId: ", data[0].batchId);
+        }
+        // Call function to display the db results of this scrape
+        displayScrapedRecipesFromDb(data[0].batchId);
+      } else {
+        console.log("Error: ", status);
+      }
+    });
+  });
 
-        // articlesDiv.empty();
-        // for (let i = 0; i < json.length; i++) {
-        //   // console.log("json: ", json[i]);
-        //   var articleWrap = $('<div class="art">');
-        //   var articleTitle = json[i].title;
-        //   var articleLink = json[i].link;
-        //   var articleImg = json[i].img;
+  // This function displays the newly scraped articles from the db
+  var displayScrapedRecipesFromDb = function (batchId) {
+    progressStateDiv.text("Success! Scraping complete! Retrieving articles from our database!");
+    articlesDiv.empty();
 
-        //   articleWrap.html("<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
+    var queryURL = "/recipes/" + batchId;
+    console.log("queryURL: ", queryURL);
 
-        //   articlesDiv.append(articleWrap);
-        // }
+    // Grab the articles from the db as a json
+    $.getJSON(queryURL, function (data) {
+      if (data.length > 0) {
+        console.log("data: ", data);
+        progressStateDiv.text("Success! Here are your database results!");
+
+        articlesDiv.empty();
+        for (let i = 0; i < data.length; i++) {
+          // console.log("data: ", data[i]);
+          var articleWrap = $('<div class="art">');
+          var articleTitle = data[i].title;
+          var articleLink = data[i].link;
+          var articleImg = data[i].img;
+
+          articleWrap.html("<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
+
+          articlesDiv.append(articleWrap);
+        }
+
+      } else {
+        progressStateDiv.removeClass("alert-success");
+        progressStateDiv.addClass("alert-warning");
+        progressStateDiv.text("No results from database, something went wrong...");
       }
     });
 
-  });
+  };
+
+
+
+
+
 
 
 
@@ -123,7 +159,6 @@ $(document).ready(function () {
   //     });
   //   }
   // });
-
   // // Grab the articles as a json
   // $.getJSON("/articles", function (data) {
   //   // For each one
@@ -140,7 +175,6 @@ $(document).ready(function () {
     $("#notes").empty();
     // Save the id from the p tag
     var thisId = $(this).attr("data-id");
-
     // Now make an ajax call for the Article
     $.ajax({
       method: "GET",
@@ -158,7 +192,6 @@ $(document).ready(function () {
         $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
         // A button to submit a new note, with the id of the article saved to it
         $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-
         // If there's a note in the article
         if (data.note) {
           // Place the title of the note in the title input
@@ -173,7 +206,6 @@ $(document).ready(function () {
   $(document).on("click", "#savenote", function () {
     // Grab the id associated with the article from the submit button
     var thisId = $(this).attr("data-id");
-
     // Run a POST request to change the note, using what's entered in the inputs
     $.ajax({
       method: "POST",
@@ -192,10 +224,8 @@ $(document).ready(function () {
         // Empty the notes section
         $("#notes").empty();
       });
-
     // Also, remove the values entered in the input and textarea for note entry
     $("#titleinput").val("");
     $("#bodyinput").val("");
   });
-
 });

@@ -12,8 +12,8 @@
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 
     <!-- jQuery UI -->
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script> -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -21,7 +21,7 @@
 
     <!-- jQuery UI CSS -->
     <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.css"> -->
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" type="text/css">
@@ -37,7 +37,8 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                Page State: <span id="page-state"></span>
+                Page State: <span id="page-state"></span><br>
+                <!-- Progress State: <span id="progress-state"></span> -->
             </div>
         </div>
         <div class="row">
@@ -46,7 +47,7 @@
                     <span class="welcome">Recipe Planner</span>
                     <small>Scrape some new food ideas!</small>
                     <nav>
-                        <ul id="menu">
+                        <ul id="menu" class="unstyled">
                             <li>
                                 <div class="content-link" data-pageState=0 data-categoryName="Home" data-getURL="/">
                                     Home

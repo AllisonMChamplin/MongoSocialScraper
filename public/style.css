@@ -151,11 +151,15 @@ label {
 }
 
 .unstyled.ui.state.active {
-    background: red;
+    background: #fff;
+}
+
+.unstyled .content-link {
+    padding-left: 10px;
 }
 
 .unstyled .content-link.active {
-    background: red;
+    background: #fff;
 }
 /* Articles List View */
 .art {
