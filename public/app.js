@@ -32,8 +32,8 @@ $(document).ready(function () {
     if (pageState === 0) {
       selectDiv.text("Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
-    // $(this).addClass("active");
-    $( "#menu li:first-child a" ).addClass("active");
+      // $(this).addClass("active");
+      $("#menu li:first-child a").addClass("active");
     }
   };
 
@@ -108,14 +108,13 @@ $(document).ready(function () {
         for (let i = 0; i < data.length; i++) {
           // console.log("data: ", data[i]);
           var articleWrap = $('<div class="art">');
-          console.log("data[i].id", data[i]._id);
+          // console.log("data[i].id", data[i]._id);
           articleWrap.attr("data-id", data[i]._id);
           var articleTitle = data[i].title;
           var articleLink = data[i].link;
           var articleImg = data[i].img;
 
-          articleWrap.html("<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
-
+          articleWrap.html("<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>" + "<br><button class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
           articlesDiv.append(articleWrap);
         }
 
@@ -128,7 +127,12 @@ $(document).ready(function () {
 
   };
 
-
+  // Click handler for recipe NOTES button:
+  articlesDiv.on("click", ".notes-button", function (event) {
+    var recipeId = $(this).attr("id");
+    console.log("notes-button clicky");
+    console.log("recipeId: ", recipeId)
+  });
 
 
 
