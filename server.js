@@ -157,28 +157,30 @@ app.get("/scrape-keto", function (req, res) {
             result.title = $(element).find("a.entry-title-link").text();
             result.link = $(element).find("a.entry-title-link").attr("href");
             result.img = $(element).find("img").attr("src");
-            // Save these resultss in an object that we'll push into the resultss array we defined earlier
+            result.category = "Keto";
+            // Save these results in an object that we'll push into the results array we defined earlier
             results.push(result);
+
+            db.Recipe.create(result)
+                .then(function (dbRecipe) {
+                    // View the added result in the console
+                    console.log(dbRecipe);
+                })
+                .catch(function (err) {
+                    // If an error occurred, log it
+                    console.log(err);
+                });
         });
         res.send(results);
-    });
-
-    // result.title = $(this).text();
-    // // Create a new Recipe using the `result` object built from scraping
-    // db.Recipe.create(result)
-    //     .then(function (dbRecipe) {
-    //         // View the added result in the console
-    //         console.log(dbRecipe);
-    //     })
-    //     .catch(function (err) {
-    //         // If an error occurred, log it
-    //         console.log(err);
-    //     });
-
-
-
-    // Send a message to the client
-    // res.send(result);
+    })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .finally(function () {
+            // always executed
+            console.log("finally?");
+        });
 });
 
 // RECIPES

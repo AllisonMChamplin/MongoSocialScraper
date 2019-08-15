@@ -59,8 +59,12 @@ $(document).ready(function () {
 
   contentTitleDiv.on("click", ".scrape-button", function (event) {
     console.log("Scrapy");
+
     var scrapeURL = $(this).val();
-    console.log("scrapeURL: ", scrapeURL);
+    
+    // disable for 3s
+    $(this).addClass("disabled");
+    $(this).attr("disabled","disabled");
 
     $.getJSON(scrapeURL, function (json) {
       if (json) {
