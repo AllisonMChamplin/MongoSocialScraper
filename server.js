@@ -116,21 +116,15 @@ app.post("/articles/:id", function (req, res) {
         });
 });
 
-
-
-
 // Scrape shape.com
 // A GET route for scraping a recipe website
 app.get("/scrape-recipes", function (req, res) {
-    console.log("wtf");
     // First, we grab the body of the html with axios
     axios.get("https://www.shape.com/healthy-eating/healthy-recipes/vegetarian-keto-recipes").then(function (response) {
-        console.log("yo");
         var $ = cheerio.load(response.data);
         $("div h3").each(function (i, element) {
             var result = {};
             result.title = $(this).text();
-
             // Create a new Recipe using the `result` object built from scraping
             db.Recipe.create(result)
                 .then(function (dbRecipe) {
@@ -145,6 +139,46 @@ app.get("/scrape-recipes", function (req, res) {
         // Send a message to the client
         res.send("Recipe Scrape Complete");
     });
+});
+
+// Scrape keto
+// A GET route for scraping a recipe website
+app.get("/scrape-keto", function (req, res) {
+    // First, we grab the body of the html with axios
+    axios.get("https://www.ditchthecarbs.com/category/slow-cooker-instant-pot/").then(function (response) {
+        // console.log(response.data);
+        var $ = cheerio.load(response.data);
+
+        // An empty array to save the data that we'll scrape
+        var results = [];
+
+        $("article").each(function (i, element) {
+            var result = {};
+            result.title = $(element).find("a.entry-title-link").text();
+            result.link = $(element).find("a.entry-title-link").attr("href");
+            result.img = $(element).find("img").attr("src");
+            // Save these resultss in an object that we'll push into the resultss array we defined earlier
+            results.push(result);
+        });
+        res.send(results);
+    });
+
+    // result.title = $(this).text();
+    // // Create a new Recipe using the `result` object built from scraping
+    // db.Recipe.create(result)
+    //     .then(function (dbRecipe) {
+    //         // View the added result in the console
+    //         console.log(dbRecipe);
+    //     })
+    //     .catch(function (err) {
+    //         // If an error occurred, log it
+    //         console.log(err);
+    //     });
+
+
+
+    // Send a message to the client
+    // res.send(result);
 });
 
 // RECIPES

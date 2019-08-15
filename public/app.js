@@ -1,9 +1,8 @@
 $(document).ready(function () {
 
   var articlesDiv = $("#articles");
-
+  var selectDiv = $('<div id="select-div">');
   var pageState = 0;
-
   var pageStateDiv = $('#page-state');
   pageStateDiv.text(pageState);
 
@@ -17,29 +16,21 @@ $(document).ready(function () {
     );
   });
 
-  $('.content-link').on("click", function (event) {
-
-    var state = $(this).attr("data-pageState");
-    console.log("state: ", state);
-    pageState = state;
-    console.log("pageState: ", pageState);
-
-    var categoryName = $(this).attr("data-categoryName");
-    console.log("categoryName: ", categoryName);
-
-    pageStateDiv.html(pageState + " " + categoryName);
-
-    refreshContent(pageState, categoryName);
-
+  $(function () {
+    $("#dialog").dialog();
   });
 
-  var selectDiv = $('<div id="select-div">');
-
-  var refreshContent = function (pageState, categoryName) {
-    console.log("pageState is: ", pageState);
-    if (pageState == 1 || pageState == 2 || pageState == 3) {
+  var refreshContent = function (pageState, categoryName, scrapeURL) {
+    if (pageState == 0) {
+      selectDiv.text("Instructions: select a topic in the left menu.");
+      articlesDiv.prepend(selectDiv);
+    } else if (pageState == 1 || pageState == 2 || pageState == 3) {
+      var scrapeButton = $('<button class="scrape-button btn btn-primary">');
+      scrapeButton.val(scrapeURL);
+      scrapeButton.text("Scrape this");
       selectDiv.empty();
-      selectDiv.text(categoryName);
+      selectDiv.html("<h3>" + categoryName + "</h3><br>");
+      selectDiv.append(scrapeButton);
       articlesDiv.prepend(selectDiv);
     }
   };
@@ -52,6 +43,32 @@ $(document).ready(function () {
   };
 
   initializeContent(0);
+
+  // Click Handlers
+  $('.content-link').on("click", function (event) {
+    var state = $(this).attr("data-pageState");
+    pageState = state;
+    var categoryName = $(this).attr("data-categoryName");
+    var scrapeURL = $(this).attr("data-scrapeURL");
+    pageStateDiv.html(pageState + " " + categoryName + " " + scrapeURL);
+    refreshContent(pageState, categoryName, scrapeURL);
+  });
+
+  $('div#articles').on("click", ".scrape-button", function (event) {
+    console.log("Scrapy");
+    var v = $(this).val();
+    console.log("v: ", v);
+
+    $.getJSON(v, function (json) {
+      if (json) {
+        //Display
+        console.log("json: ", json);
+      }
+    });
+  });
+
+
+
 
   // var selectMenuOptionState;
   // // Initialize SelectMenu

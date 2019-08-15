@@ -34,14 +34,6 @@
 
 <body data-spy="scroll" data-target="#navbarTarget" id="page-top">
 
-    <!-- <div id="wrapper">
-        <h1>My Note Scraper</h1>
-        <h2><i>I can do this.</i></h2>
-        <div id="articles"></div>
-        <div id="notes"></div>
-    </div> -->
-    <!-- <div class="hello">Hello</div> -->
-
     <div class="container">
         <div class="row">
             <div class="col">
@@ -56,95 +48,29 @@
                     <nav>
                         <ul id="menu">
                             <li>
-                                <div class="content-link" data-pageState=1 data-categoryName="Vegan Recipes">Vegan Recipes</div>
+                                <div class="content-link" data-pageState=1 data-categoryName="Vegan Recipes"
+                                    data-scrapeURL="#">
+                                    Vegan Recipes
+                                </div>
                             </li>
                             <li>
-                                <div class="content-link" data-pageState=2 data-categoryName="Keto Recipes">Keto Recipes</div>
+                                <div class="content-link" data-pageState=2 data-categoryName="Keto Recipes"
+                                    data-scrapeURL="/scrape-keto">
+                                    Keto Recipes
+                                </div>
                             </li>
                             <li>
-                                <div class="content-link" data-pageState=3 data-categoryName="Vegan-Keto Recipes">Vegan-Keto Recipes</div>
+                                <div class="content-link" data-pageState=3 data-categoryName="Vegan-Keto Recipes"
+                                    data-scrapeURL="#">
+                                    Vegan-Keto Recipes
+                                </div>
                             </li>
-                            <!-- <li>
-                                <div>Electronics</div>
-                                <ul>
-                                    <li>
-                                        <div>Car Hifi</div>
-                                    </li>
-                                    <li>
-                                        <div>Utilities</div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <div>Movies</div>
-                            </li>
-                            <li>
-                                <div>Music</div>
-                                <ul>
-                                    <li>
-                                        <div>Rock</div>
-                                        <ul>
-                                            <li>
-                                                <div>Alternative</div>
-                                            </li>
-                                            <li>
-                                                <div>Classic</div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <div>Jazz</div>
-                                        <ul>
-                                            <li>
-                                                <div>Freejazz</div>
-                                            </li>
-                                            <li>
-                                                <div>Big Band</div>
-                                            </li>
-                                            <li>
-                                                <div>Modern</div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li> -->
                         </ul>
-
-
-
-
-
-                        <!--                         
-                        <ul class="">
-                            <li class="nav-item">
-                                <a href="#page-top">Home</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a href="/scrape">Scrape JS</a>
-                                <a href="/articles">Articles</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/scrape-recipes">Scrape Recipes</a>
-                                <a href="/recipes">Recipes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#">Contact</a>
-                            </li>
-                        </ul> -->
                     </nav>
                 </div>
             </div>
 
             <div class="col-sm-6" id="main">
-                <!-- <form action="#">
-                    <fieldset>
-                        <label for="sites">Select a source</label>
-                        <select name="sites" id="sites">
-                            <option value="/recipes">Shape</option>
-                            <option value="/articles">Code Articles</option>
-                        </select>
-                    </fieldset>
-                </form> -->
                 <div class="container card-wrap my-5 p-4">
                     <div class="row">
                         <div class="col" id="articles">
@@ -152,6 +78,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-sm-3" id="right">
                 <div class="container card-wrap my-5 p-4">
                     <div class="row">
