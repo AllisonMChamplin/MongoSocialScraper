@@ -148,7 +148,7 @@ app.get("/scrape-keto", function (req, res) {
     axios.get("https://www.ditchthecarbs.com/category/slow-cooker-instant-pot/").then(function (response) {
         // console.log(response.data);
         var $ = cheerio.load(response.data);
-
+        var timeStamp = Date.now();
         // An empty array to save the data that we'll scrape
         var results = [];
 
@@ -158,9 +158,11 @@ app.get("/scrape-keto", function (req, res) {
             result.link = $(element).find("a.entry-title-link").attr("href");
             result.img = $(element).find("img").attr("src");
             result.category = "Keto";
+            result.batchId = timeStamp;
             // Save these results in an object that we'll push into the results array we defined earlier
             results.push(result);
 
+            // Add result to the db
             db.Recipe.create(result)
                 .then(function (dbRecipe) {
                     // View the added result in the console
@@ -171,16 +173,9 @@ app.get("/scrape-keto", function (req, res) {
                     console.log(err);
                 });
         });
+
         res.send(results);
     })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        })
-        .finally(function () {
-            // always executed
-            console.log("finally?");
-        });
 });
 
 // RECIPES

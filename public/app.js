@@ -49,6 +49,14 @@ $(document).ready(function () {
 
   // Click Handlers
   $('.content-link').on("click", function (event) {
+
+    $(".content-link.active").removeClass("active");
+
+    $(this).addClass("active");
+
+
+    $('nav').find("a.content-link")
+    $(this).addClass("active");
     var state = $(this).attr("data-pageState");
     pageState = state;
     var categoryName = $(this).attr("data-categoryName");
@@ -58,30 +66,30 @@ $(document).ready(function () {
   });
 
   contentTitleDiv.on("click", ".scrape-button", function (event) {
-    console.log("Scrapy");
+    console.log("Clicky");
 
     var scrapeURL = $(this).val();
-    
-    // disable for 3s
+
+    // disable button
     $(this).addClass("disabled");
-    $(this).attr("disabled","disabled");
+    $(this).attr("disabled", "disabled");
 
     $.getJSON(scrapeURL, function (json) {
       if (json) {
-        // console.log("json: ", json);
+        console.log("json: ", json);
 
-        articlesDiv.empty();
-        for (let i = 0; i < json.length; i++) {
-          // console.log("json: ", json[i].title);
-          var articleWrap = $('<div class="art">');
-          var articleTitle = json[i].title;
-          var articleLink = json[i].link;
-          var articleImg = json[i].img;
+        // articlesDiv.empty();
+        // for (let i = 0; i < json.length; i++) {
+        //   // console.log("json: ", json[i]);
+        //   var articleWrap = $('<div class="art">');
+        //   var articleTitle = json[i].title;
+        //   var articleLink = json[i].link;
+        //   var articleImg = json[i].img;
 
-          articleWrap.html("<h6>" + articleTitle + "</h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
-          
-          articlesDiv.append(articleWrap);
-        }
+        //   articleWrap.html("<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<img src='" + articleImg + "'>");
+
+        //   articlesDiv.append(articleWrap);
+        // }
       }
     });
 

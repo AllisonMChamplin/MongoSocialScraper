@@ -26,6 +26,11 @@ var RecipeSchema = new Schema({
         type: String,
         required: true
     },
+    // `batchId` is required and of type Date
+    batchId: {
+        type: Date,
+        required: true
+    },
     // `note` is an object that stores a Note id
     // The ref property links the ObjectId to the Note model
     // This allows us to populate the Recipe with an associated Note

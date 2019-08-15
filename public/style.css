@@ -154,7 +154,9 @@ label {
     background: red;
 }
 
-
+.unstyled .content-link.active {
+    background: red;
+}
 /* Articles List View */
 .art {
     border: 1px solid #fff;
