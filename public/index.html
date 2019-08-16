@@ -26,7 +26,7 @@
 
 <body data-spy="scroll" data-target="#navbarTarget" id="page-top">
 
-    <!-- Page State: <span id="page-state"></span><br> -->
+    Page State: <span id="page-state"></span><br>
     <!-- Progress State: <span id="progress-state"></span> -->
 
 
@@ -43,22 +43,25 @@
                 </button>
             </div>
         </div>
-        <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7">
+        <div class="collapse navbar-collapse flex-grow-1 text-right">
             <ul class="navbar-nav ml-auto flex-nowrap">
-
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-pageState=0 data-categoryName="Home" data-getURL="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-pageState=1 data-categoryName="Home" data-getURL="/scrape">Scrape
-                        New</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-pageState=2 id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Scrape Recipes</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a href="#" id="" class="dropdown-item nav-link" data-pageState=4 data-categoryName="Keto Recipes"
+                            data-scrapeURL="/scrape/keto">Keto Recipes</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-pageState=2 data-categoryName="Home" data-getURL="/recipes">View
                         Saved</a>
                 </li>
 
-<!-- 
+                <!-- 
                 <li class="nav-item">
                     <a href="#" class="nav-link">Link</a>
                 </li>
@@ -122,7 +125,7 @@
 
     <!-- </div> -->
 
-    
+
     <div class="jumbotron jumbotron-fluid text-center">
         <div class="container">
             <div class="caption">
@@ -133,7 +136,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="container-fluid">
         <div class="container-fluid">
             <div class="row">

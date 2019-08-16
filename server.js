@@ -143,7 +143,7 @@ app.get("/scrape-recipes", function (req, res) {
 
 // Scrape keto
 // A GET route for scraping a recipe website
-app.get("/scrape-keto", function (req, res) {
+app.get("/scrape/keto", function (req, res) {
     // First, we grab the body of the html with axios
     axios.get("https://www.ditchthecarbs.com/category/slow-cooker-instant-pot/").then(function (response) {
         // console.log(response.data);

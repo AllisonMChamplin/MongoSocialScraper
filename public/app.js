@@ -11,12 +11,20 @@ $(document).ready(function () {
   progressStateDiv.text(" ");
 
 
+  // Functions // // // // // // // // // // // // // // // // // // //
+
+  // This function updates the page content based on the page state
   var refreshContent = function (pageState, categoryName, scrapeURL) {
+    console.log("refreshcontent");
     if (pageState == 0) {
       selectDiv.empty();
       selectDiv.html("<h3>" + categoryName + "</h3><br>Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
     } else if (pageState == 1 || pageState == 2 || pageState == 3) {
+      console.log("blah");
+    } else if (pageState == 4) {
+      console.log("blah");
+
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
       scrapeButton.val(scrapeURL);
       scrapeButton.text("Scrape this");
@@ -27,68 +35,6 @@ $(document).ready(function () {
       contentTitleDiv.append(progressStateDiv);
     }
   };
-
-  var initializeContent = function (pageState) {
-    if (pageState === 0) {
-      selectDiv.text("Instructions: select a topic in the left menu.");
-      contentTitleDiv.prepend(selectDiv);
-      // $(this).addClass("active");
-      $("#menu li:first-child a").addClass("active");
-    }
-  };
-
-  initializeContent(0);
-
-  // Click Handler for left nav
-  $('.content-link').on("click", function (event) {
-    console.log("Clicky left nav");
-
-    $(".content-link.active").removeClass("active");
-    $(this).addClass("active");
-
-    $(".scrape-button").remove();
-    $("#articles").empty();
-
-    // $('nav').find("a.content-link");
-    var state = $(this).attr("data-pageState");
-    pageState = state;
-    var categoryName = $(this).attr("data-categoryName");
-    var scrapeURL = $(this).attr("data-scrapeURL");
-    pageStateDiv.html(pageState + " " + categoryName + " " + scrapeURL);
-    progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
-    progressStateDiv.text(" ");
-    refreshContent(pageState, categoryName, scrapeURL);
-  });
-
-  // Click handler for scrape button
-  contentTitleDiv.on("click", ".scrape-button", function (event) {
-    console.log("Clicky scrape button");
-    progressStateDiv.addClass("alert");
-    progressStateDiv.text("Scraping in progress...");
-
-    var scrapeURL = $(this).val();
-
-    // disable button
-    $(this).addClass("disabled");
-    $(this).attr("disabled", "disabled");
-
-    $.getJSON(scrapeURL, function (data, status) {
-      if (data.length > 0) {
-        progressStateDiv.addClass("alert-success");
-        progressStateDiv.text("Success! Scraping complete!");
-        console.log("data: ", data);
-        console.log("data.length: ", data.length);
-        console.log("Status: ", status);
-        if (data[0].batchId) {
-          console.log("batchId: ", data[0].batchId);
-        }
-        // Call function to display the db results of this scrape
-        displayScrapedRecipesFromDb(data[0].batchId);
-      } else {
-        console.log("Error: ", status);
-      }
-    });
-  });
 
   // This function displays the newly scraped articles from the db
   var displayScrapedRecipesFromDb = function (batchId) {
@@ -126,6 +72,79 @@ $(document).ready(function () {
     });
 
   };
+
+  var initializeContent = function (pageState) {
+    if (pageState === 0) {
+      selectDiv.text("Instructions: select a topic in the left menu.");
+      contentTitleDiv.prepend(selectDiv);
+      // $(this).addClass("active");
+      $("#menu li:first-child a").addClass("active");
+    }
+  };
+
+  initializeContent(0);
+
+
+  // CLICK HANDLERS // // // // // // // // // // // // // // // // // // //
+
+  // Click handler for nav
+  $('.nav-link').on("click", function (event) {
+
+    console.log("Clicky nav");
+    var state = $(this).attr("data-pageState");
+    pageState = state;
+    console.log("pageState: ", pageState);
+    var navId = $(this).attr("id");
+    console.log("navId: ", navId);
+
+    if (navId == "navbarDropdown") {
+      return;
+    } else {
+      $(".nav-link.active").removeClass("active");
+      $(this).addClass("active");
+
+      $(".scrape-button").remove();
+      $("#articles").empty();
+
+      var categoryName = $(this).attr("data-categoryName");
+      var scrapeURL = $(this).attr("data-scrapeURL");
+      pageStateDiv.html(pageState + " " + categoryName + " " + scrapeURL);
+      progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
+      progressStateDiv.text(" ");
+      refreshContent(pageState, categoryName, scrapeURL);
+    }
+
+  });
+
+  // Click handler for scrape button
+  contentTitleDiv.on("click", ".scrape-button", function (event) {
+    console.log("Clicky scrape button");
+    progressStateDiv.addClass("alert");
+    progressStateDiv.text("Scraping in progress...");
+
+    var scrapeURL = $(this).val();
+
+    // disable button
+    $(this).addClass("disabled");
+    $(this).attr("disabled", "disabled");
+
+    $.getJSON(scrapeURL, function (data, status) {
+      if (data.length > 0) {
+        progressStateDiv.addClass("alert-success");
+        progressStateDiv.text("Success! Scraping complete!");
+        console.log("data: ", data);
+        console.log("data.length: ", data.length);
+        console.log("Status: ", status);
+        if (data[0].batchId) {
+          console.log("batchId: ", data[0].batchId);
+        }
+        // Call function to display the db results of this scrape
+        displayScrapedRecipesFromDb(data[0].batchId);
+      } else {
+        console.log("Error: ", status);
+      }
+    });
+  });
 
   // Click handler for recipe NOTES button:
   articlesDiv.on("click", ".notes-button", function (event) {
