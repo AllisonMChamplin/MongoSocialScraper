@@ -3,12 +3,16 @@ $(document).ready(function () {
   var articlesDiv = $("#articles");
   var contentTitleDiv = $('#content-title');
   var selectDiv = $('<div id="select-div">');
+  selectDiv.empty();
+  contentTitleDiv.prepend(selectDiv);
+
   var pageState = 0;
   var pageStateDiv = $('#page-state');
   pageStateDiv.text(pageState);
 
   var jumboDiv = $(".jumbotron");
-  var subHeader = $(".sub-header");
+  var subHeaderDiv = $(".sub-header");
+  subHeaderDiv.hide();
   var progressStateDiv = $('<div id="progress-state">');
   progressStateDiv.text(" ");
 
@@ -18,21 +22,17 @@ $(document).ready(function () {
   // This function updates the page content based on the page state
   var refreshContent = function (pageState, categoryName, scrapeURL) {
     console.log("refreshcontent");
+    console.log("pageState: ", pageState);
     if (pageState == 0) {
-      selectDiv.empty();
-      // selectDiv.html("<h3>" + categoryName + "</h3><br>Instructions: select a topic in the left menu.");
-      contentTitleDiv.prepend(selectDiv);
-      subHeader.empty();
-      subHeader.slideUp("fast");
-      jumboDiv.slideDown("fast");
+
     } else if (pageState == 1 || pageState == 2 || pageState == 3) {
       jumboDiv.slideUp("fast");
-      subHeader.slideDown("fast");
+      subHeaderDiv.slideDown("fast");
     } else if (pageState == 4) {
       jumboDiv.slideUp("fast");
-      subHeader.slideDown("fast");
-      subHeader.empty();
-      subHeader.append("<h2>" + categoryName + "</h2>");
+      subHeaderDiv.slideDown("fast");
+      subHeaderDiv.empty();
+      subHeaderDiv.append("<h2>" + categoryName + "</h2>");
 
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
       scrapeButton.val(scrapeURL);
@@ -84,9 +84,11 @@ $(document).ready(function () {
 
   var initializeContent = function (pageState) {
     if (pageState === 0) {
-      selectDiv.text("Instructions: select a topic in the left menu.");
-      contentTitleDiv.prepend(selectDiv);
-      // $(this).addClass("active");
+      selectDiv.empty();
+      selectDiv.text("Homepage content.");
+      jumboDiv.slideDown("fast");
+      subHeaderDiv.hide();
+      $(".nav-link.active").removeClass("active");
       $("#menu li:first-child a").addClass("active");
     }
   };
@@ -108,6 +110,17 @@ $(document).ready(function () {
 
     if (navId == "navbarDropdown") {
       return;
+
+    } else if (pageState == 0) {
+      $(".nav-link.active").removeClass("active");
+      $(this).addClass("active");
+
+      $(".scrape-button").remove();
+      $("#articles").empty();
+
+      pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
+      initializeContent(0);
+
     } else {
       $(".nav-link.active").removeClass("active");
       $(this).addClass("active");
@@ -117,7 +130,7 @@ $(document).ready(function () {
 
       var categoryName = $(this).attr("data-categoryName");
       var scrapeURL = $(this).attr("data-scrapeURL");
-      pageStateDiv.html(pageState + " " + categoryName + " " + scrapeURL);
+      pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
       progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
       progressStateDiv.text(" ");
       refreshContent(pageState, categoryName, scrapeURL);
