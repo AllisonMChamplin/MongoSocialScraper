@@ -11,9 +11,9 @@ html {
 
 
 body {
-    background-color: #ccc;
+    background-color: #998979;
     font-family: 'Roboto', sans-serif;
-    color: #666;
+    color: #5d514a;
     font-size: 1.2em;
 }
 
@@ -81,6 +81,7 @@ textarea {
     display: block;
     font-size: 1.5em;
     margin-top: 24px;
+    color: #523e2d;
 }
 
 #left small {
@@ -96,7 +97,7 @@ textarea {
 .content-link, .content-link:visited {
     border-bottom: 1px solid #444444;
     display: block;
-    padding: 8px 0;
+    padding: 3px 0;
     color: #7c5266;
     text-decoration: none;
     -webkit-transition-property: -webkit-padding-left; /* Safari */
@@ -104,6 +105,7 @@ textarea {
     transition-property: padding-left;
     transition-duration: .5s;
     padding-left: 5px;
+    font-size: .9em;
 }
 
 .content-link:hover {
@@ -119,13 +121,14 @@ textarea {
     padding-left: 10px;
 }
 
+
 /* End Left Nav */
 
 
 
 
 .card-wrap {
-    background: #ccc;
+    background: #b0a69b;
     border: 1px solid #fff;
 }
 
@@ -159,8 +162,74 @@ label {
     border: 1px solid #fff;
     padding: 10px;
     margin: 20px 0;
+    background: #f1f1f1;
 }
 
 .art img {
     width: 100%;
+}
+
+body, .container {
+    /* height: 100%; */
+}
+
+
+
+.top-bar {
+    background: #000;
+}
+
+.testing {
+    background: #333;
+    color: #666;
+}
+
+.jumbotron-fluid {
+    /* background: red; */
+    /* background: url("spices.jpg"); */
+    /* background: url("food-prep.jpg"); */
+    background: url("carrots.jpg");
+
+    height: 100%;
+    background-size: cover;
+    color: #fff;
+}
+
+.jumbotron {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    padding: 0;
+    font-family: "Cormorant SC", sans-serif;
+    box-shadow: 0px 0px 10px 3px #422b14;
+}
+
+.jumbotron .container {
+
+}
+
+.jumbotron .caption {
+    
+}
+
+.jumbotron .display-4 {
+    font-size: 80px;
+    font-weight: 800;
+    position: relative;
+    top: 130px;
+}
+
+.jumbotron .lead {
+    font-size: 30px;
+    position: relative;
+    top: 130px;
+}
+
+.jumbotron .btn {
+    position: relative;
+    top: 150px;
+}
+
+.container-fluid {
+    margin: 0 !important;
 }

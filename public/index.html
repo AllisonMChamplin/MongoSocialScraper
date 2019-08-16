@@ -11,17 +11,9 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 
-    <!-- jQuery UI -->
-    <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
-        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script> -->
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- jQuery UI CSS -->
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
-    <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/humanity/jquery-ui.css"> -->
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" type="text/css">
@@ -34,28 +26,71 @@
 
 <body data-spy="scroll" data-target="#navbarTarget" id="page-top">
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                Page State: <span id="page-state"></span><br>
-                <!-- Progress State: <span id="progress-state"></span> -->
+    <!-- Page State: <span id="page-state"></span><br> -->
+    <!-- Progress State: <span id="progress-state"></span> -->
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="d-flex flex-grow-1">
+            <span class="w-100 d-lg-none d-block">
+                <!-- hidden spacer to center brand on mobile --></span>
+            <a class="navbar-brand" href="#">
+                MongoRecipes
+            </a>
+            <div class="w-100 text-right">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-3" id="left">
-                <div class="container card-wrap my-5 p-4 drop-shadow">
-                    <span class="welcome">Recipe Planner</span>
+        <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-pageState=0 data-categoryName="Home" data-getURL="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-pageState=1 data-categoryName="Home" data-getURL="/scrape">Scrape
+                        New</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-pageState=2 data-categoryName="Home" data-getURL="/recipes">View
+                        Saved</a>
+                </li>
+
+<!-- 
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Link</a>
+                </li> -->
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- <div class="row">
+            <div class="col">
+                <div class="container">
                     <small>Scrape some new food ideas!</small>
                     <nav>
                         <ul id="menu" class="unstyled">
                             <li>
                                 <a class="content-link" data-pageState=0 data-categoryName="Home" data-getURL="/">
                                     Home
-                                </a>
-                            </li>
-                            <li>
-                                <a class="content-link" data-pageState=1 data-categoryName="All" data-getURL="/recipes">
-                                    All
                                 </a>
                             </li>
                             <li>
@@ -80,37 +115,66 @@
                     </nav>
                 </div>
             </div>
+        </div> -->
 
-            <div class="col-sm-6" id="main">
-                <div class="container card-wrap my-5 p-4">
-                    <div class="row">
-                        <div class="col" id="content-title"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col" id="articles"></div>
+
+
+
+    <!-- </div> -->
+
+    
+    <div class="jumbotron jumbotron-fluid text-center">
+        <div class="container">
+            <div class="caption">
+                <h1 class="display-4">Recipe Scraper</h1>
+                <p class="lead">Scrape some new food ideas!</p>
+                <button class="btn btn-primary">Scrape some recipes!</button>
+                <button class="btn btn-primary">View saved recipes!</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col" id="main">
+                    <div class="container card-wrap my-5 p-4 drop-shadow">
+                        <div class="row">
+                            <div class="col" id="content-title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col" id="articles"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-sm-3" id="right">
-                <div class="container card-wrap my-5 p-4">
+                <!-- <div class="col-sm-3" id="right">
+                <div class="container card-wrap my-5 p-4 drop-shadow">
                     <div class="row">
                         <div class="col" id="notes">
                             <h3>Notes</h3>
                         </div>
                     </div>
                 </div>
+            </div> -->
+            </div>
+            <div class="row footer">
+                <div class="col">
+                    <div class="container">
+                        Mongo Recipe Scraper | Photo Credits: <a href="https://pixabay.com/" target="_blank"
+                            title="Photo credit: Pixabay.com">Pixabay.com</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <script src="app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="app.js"></script>
 </body>
 
 </html>
