@@ -7,6 +7,8 @@ $(document).ready(function () {
   var pageStateDiv = $('#page-state');
   pageStateDiv.text(pageState);
 
+  var jumboDiv = $(".jumbotron");
+  var subHeader = $(".sub-header");
   var progressStateDiv = $('<div id="progress-state">');
   progressStateDiv.text(" ");
 
@@ -18,12 +20,19 @@ $(document).ready(function () {
     console.log("refreshcontent");
     if (pageState == 0) {
       selectDiv.empty();
-      selectDiv.html("<h3>" + categoryName + "</h3><br>Instructions: select a topic in the left menu.");
+      // selectDiv.html("<h3>" + categoryName + "</h3><br>Instructions: select a topic in the left menu.");
       contentTitleDiv.prepend(selectDiv);
+      subHeader.empty();
+      subHeader.slideUp("fast");
+      jumboDiv.slideDown("fast");
     } else if (pageState == 1 || pageState == 2 || pageState == 3) {
-      console.log("blah");
+      jumboDiv.slideUp("fast");
+      subHeader.slideDown("fast");
     } else if (pageState == 4) {
-      console.log("blah");
+      jumboDiv.slideUp("fast");
+      subHeader.slideDown("fast");
+      subHeader.empty();
+      subHeader.append("<h2>" + categoryName + "</h2>");
 
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
       scrapeButton.val(scrapeURL);
