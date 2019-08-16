@@ -34,7 +34,7 @@
         <div class="d-flex flex-grow-1">
             <span class="w-100 d-lg-none d-block">
                 <!-- hidden spacer to center brand on mobile --></span>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 MongoRecipes
             </a>
             <div class="w-100 text-right">
@@ -46,15 +46,11 @@
         <div class="collapse navbar-collapse flex-grow-1 text-right">
             <ul class="navbar-nav ml-auto flex-nowrap">
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-pageState=0 data-categoryName="Home" data-getURL="/">Home</a>
+                    <a href="/" class="nav-link" data-pageState=0 data-categoryName="Home" data-getURL="/">Home</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-pageState=2 id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Scrape Recipes</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a href="#" id="" class="dropdown-item nav-link" data-pageState=4 data-categoryName="Keto Recipes"
-                            data-scrapeURL="/scrape/keto">Keto Recipes</a>
-                    </div>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-pageState=1 data-categoryName="Scrape New Recipes"
+                        data-getURL="/">Scrape New Recipes</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-pageState=2 data-categoryName="Home" data-getURL="/recipes">View

@@ -8,7 +8,6 @@ $(document).ready(function () {
 
   var pageState = 0;
   var pageStateDiv = $('#page-state');
-  pageStateDiv.text(pageState);
 
   var jumboDiv = $(".jumbotron");
   var subHeaderDiv = $(".sub-header");
@@ -16,16 +15,39 @@ $(document).ready(function () {
   var progressStateDiv = $('<div id="progress-state">');
   progressStateDiv.text(" ");
 
+  var sitesArray = [["Keto", "Description", "/scrape/keto"]];
 
-  // Functions // // // // // // // // // // // // // // // // // // //
 
   // This function updates the page content based on the page state
   var refreshContent = function (pageState, categoryName, scrapeURL) {
     console.log("refreshcontent");
     console.log("pageState: ", pageState);
-    if (pageState == 0) {
+    // if (pageState == 0) {
+    //   jumboDiv.slideDown("fast");
+    // }
+    if (pageState == 1) {
+      jumboDiv.slideUp("fast");
+      subHeaderDiv.append("<h2>" + categoryName + "</h2>");
+      subHeaderDiv.slideDown("fast");
+      selectDiv.empty();
+      var header = "<h3>Select an option</h3><br>";
+      selectDiv.append(header);
+      for (let i = 0; i < sitesArray.length; i++) {
+        var card = $('<div class="card" style="width: 30%">');
+        var cardBody = $('<div class="card-body">');
+        var h5 = $('<h5 class="card-title">');
+        h5.text(sitesArray[i][0]);
+        var p = $('<p class="card-text">');
+        p.text(sitesArray[i][1]);
+        var link = $('<a href="#" class="btn btn-primary">');
+        link.attr("href", sitesArray[i][2]);
+        link.text("Scrape New Articles");
+        cardBody.append(h5, p, link);
+        card.append(cardBody);
+        selectDiv.append(card);
+      }
 
-    } else if (pageState == 1 || pageState == 2 || pageState == 3) {
+    } else if (pageState == 2 || pageState == 3) {
       jumboDiv.slideUp("fast");
       subHeaderDiv.slideDown("fast");
     } else if (pageState == 4) {
@@ -33,7 +55,6 @@ $(document).ready(function () {
       subHeaderDiv.slideDown("fast");
       subHeaderDiv.empty();
       subHeaderDiv.append("<h2>" + categoryName + "</h2>");
-
       var scrapeButton = $('<button class="scrape-button btn btn-primary">');
       scrapeButton.val(scrapeURL);
       scrapeButton.text("Scrape this");
@@ -83,14 +104,12 @@ $(document).ready(function () {
   };
 
   var initializeContent = function (pageState) {
-    if (pageState === 0) {
-      selectDiv.empty();
-      selectDiv.text("Homepage content.");
-      jumboDiv.slideDown("fast");
-      subHeaderDiv.hide();
-      $(".nav-link.active").removeClass("active");
-      $("#menu li:first-child a").addClass("active");
-    }
+    selectDiv.empty();
+    selectDiv.text("Homepage content.");
+    jumboDiv.slideDown("fast");
+    subHeaderDiv.hide();
+    $(".nav-link.active").removeClass("active");
+    $("#menu li:first-child a").addClass("active");
   };
 
   initializeContent(0);
@@ -100,42 +119,30 @@ $(document).ready(function () {
 
   // Click handler for nav
   $('.nav-link').on("click", function (event) {
-
     console.log("Clicky nav");
+
+    $(".nav-link.active").removeClass("active");
+    $(this).addClass("active");
+
     var state = $(this).attr("data-pageState");
     pageState = state;
     console.log("pageState: ", pageState);
     var navId = $(this).attr("id");
     console.log("navId: ", navId);
 
-    if (navId == "navbarDropdown") {
-      return;
+    var categoryName = $(this).attr("data-categoryName");
+    var scrapeURL = $(this).attr("data-scrapeURL");
+    pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
+    $(".scrape-button").remove();
+    $("#articles").empty();
 
-    } else if (pageState == 0) {
-      $(".nav-link.active").removeClass("active");
-      $(this).addClass("active");
-
-      $(".scrape-button").remove();
-      $("#articles").empty();
-
-      pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
+    if (pageState == 0) {
       initializeContent(0);
-
     } else {
-      $(".nav-link.active").removeClass("active");
-      $(this).addClass("active");
-
-      $(".scrape-button").remove();
-      $("#articles").empty();
-
-      var categoryName = $(this).attr("data-categoryName");
-      var scrapeURL = $(this).attr("data-scrapeURL");
-      pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
       progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
       progressStateDiv.text(" ");
       refreshContent(pageState, categoryName, scrapeURL);
     }
-
   });
 
   // Click handler for scrape button
