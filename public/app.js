@@ -27,24 +27,27 @@ $(document).ready(function () {
     var categoryName = $(this).attr("data-categoryName");
     pageState = state;
     console.log("pageState: ", pageState);
+    articlesDiv.empty();
     refreshContentHeader(pageState, categoryName);
   });
 
   var refreshContentHeader = function (pageState, categoryName) {
     console.log("refreshing");
     console.log("pageState: ", pageState);
-    selectDiv.empty();
+    progressStateDiv.removeClass("alert-success alert-info alert-warning");
+    progressStateDiv.empty();
+    progressStateDiv.hide();
 
     if (pageState == 1) {
       console.log("pageState 1 stuff");
-      jumboDiv.slideUp("fast");
+      jumboDiv.hide();
       subHeaderDiv.empty();
       subHeaderDiv.append("<h2>" + categoryName + "</h2>");
       subHeaderDiv.hide().appendTo(contentSwapDiv).slideDown(500);
-      refreshContentMain1(pageState);
+      refreshContentMain1();
     } else if (pageState == 2) {
       console.log("pageState 2 stuff");
-      jumboDiv.slideUp("fast");
+      jumboDiv.hide();
       subHeaderDiv.empty();
       subHeaderDiv.append("<h2>" + categoryName + "</h2>");
       subHeaderDiv.hide().appendTo(contentSwapDiv).slideDown(500);
@@ -53,25 +56,20 @@ $(document).ready(function () {
   };
 
   // Display scrape page stuff
-  var refreshContentMain1 = function (pageState) {
-    selectDiv.slideUp("fast");
-    selectDiv.empty();
-    // selectDiv.append("<h3>How it Works</h3>");
-    // selectDiv.append("<p>Click on the button to scrape new recipes!</p>");
+  var refreshContentMain1 = function () {
+    console.log("refreshContentMain1: ");
+
 
     var scrapeButton = $('<button class="scrape-button btn btn-success">');
     scrapeButton.val(sitesArray[0][2]);
     scrapeButton.text("Scrape New Recipes");
     selectDiv.append(scrapeButton);
-
     selectDiv.slideDown("fast");
   }
 
   // Display saved page stuff
   var refreshContentMain2 = function (pageState) {
-    selectDiv.slideUp("fast");
     selectDiv.empty();
-    selectDiv.slideDown("fast");
     displayAllRecipesFromDb();
   }
 
@@ -92,6 +90,8 @@ $(document).ready(function () {
   contentTitleDiv.on("click", ".scrape-button", function (event) {
     console.log("Clicky scrape button");
     console.log("val: ", $(this).val());
+    articlesDiv.empty();
+
     var button = $(".scrape-button");
     progressStateDiv.addClass("alert-info");
     progressStateDiv.text("Scraping in progress...");
@@ -138,7 +138,6 @@ $(document).ready(function () {
         console.log("data: ", data);
         progressStateDiv.text("Success! Here are your database results!");
 
-        articlesDiv.empty();
         for (let i = 0; i < data.length; i++) {
           // console.log("data: ", data[i]);
           var articleWrap = $('<div class="art clearfix">');
@@ -165,16 +164,20 @@ $(document).ready(function () {
   // This function displays all recipes from the db
   var displayAllRecipesFromDb = function () {
     articlesDiv.empty();
+    selectDiv.append(progressStateDiv);
+    progressStateDiv.show();
 
     var queryURL = "/recipes";
 
     // Grab the articles from the db as a json
     $.getJSON(queryURL, function (data) {
+      console.log("data.length: ", data.length);
       if (data.length > 0) {
         console.log("data: ", data);
+
+        progressStateDiv.addClass("alert-success");
         progressStateDiv.text("Success! Here are your database results!");
 
-        articlesDiv.empty();
         for (let i = 0; i < data.length; i++) {
           // console.log("data: ", data[i]);
           var articleWrap = $('<div class="art clearfix">');
@@ -183,18 +186,31 @@ $(document).ready(function () {
           var articleTitle = data[i].title;
           var articleLink = data[i].link;
           var articleImg = data[i].img;
-
-          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
+          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button type='button' data-toggle='modal' data-target='#exampleModalLong' class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
           articlesDiv.append(articleWrap);
         }
 
       } else {
+        console.log("0");
+        progressStateDiv.show();
         progressStateDiv.removeClass("alert-success");
         progressStateDiv.addClass("alert-warning");
-        progressStateDiv.text("No results from database, something went wrong...");
+        progressStateDiv.text("Uh Oh. Looks like we don't have any saved articles.");
       }
     });
 
   };
+
+  // Click handler for recipe NOTES button:
+  articlesDiv.on("click", ".notes-button", function (event) {
+    var recipeId = $(this).attr("id");
+    console.log("notes-button clicky");
+    console.log("recipeId: ", recipeId);
+  });
+
+
+
+
+
 
 });
