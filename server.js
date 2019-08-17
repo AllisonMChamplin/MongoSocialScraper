@@ -158,20 +158,22 @@ app.get("/scrape/keto", function (req, res) {
             result.link = $(element).find("a.entry-title-link").attr("href");
             result.img = $(element).find("img").attr("src");
             result.category = "Keto";
-            result.batchId = timeStamp;
+            result.batchId = 0;
+            result.timeStamp = timeStamp;
+            // result.batchId = timeStamp;
             // Save these results in an object that we'll push into the results array we defined earlier
             results.push(result);
 
-            // Add result to the db
-            db.Recipe.create(result)
-                .then(function (dbRecipe) {
-                    // View the added result in the console
-                    console.log(dbRecipe);
-                })
-                .catch(function (err) {
-                    // If an error occurred, log it
-                    console.log(err);
-                });
+            // // Add result to the db
+            // db.Recipe.create(result)
+            //     .then(function (dbRecipe) {
+            //         // View the added result in the console
+            //         console.log(dbRecipe);
+            //     })
+            //     .catch(function (err) {
+            //         // If an error occurred, log it
+            //         console.log(err);
+            //     });
         });
         res.send(results);
     })

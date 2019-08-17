@@ -26,8 +26,12 @@ var RecipeSchema = new Schema({
         type: String,
         required: true
     },
-    // `batchId` is required and of type Date
+    // `batchId` is of type Date
     batchId: {
+        type: Date
+    },
+    // `timeStamp` is required and of type Date
+    timeStamp: {
         type: Date,
         required: true
     },

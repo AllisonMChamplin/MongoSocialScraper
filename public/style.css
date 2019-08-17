@@ -128,7 +128,7 @@ textarea {
 
 
 .card-wrap {
-    background: #e1cebb;
+    background: #ac9d8e;
     /* border: 1px solid #b3a394; */
 }
 
@@ -274,4 +274,15 @@ body, .container {
 
 #progress-state {
     margin-top: 20px;
+}
+
+.card {
+    width: 47%;
+    float: left;
+    margin: 10px 15px 0;
+    /* border: 1px solid red; */
+}
+
+.card img {
+    width: 100%;
 }
