@@ -71,8 +71,8 @@ $(document).ready(function () {
   var refreshContentMain2 = function (pageState) {
     selectDiv.slideUp("fast");
     selectDiv.empty();
-    selectDiv.text("pageState 2 stuff");
     selectDiv.slideDown("fast");
+    displayAllRecipesFromDb();
   }
 
   // Initialize App
@@ -162,5 +162,39 @@ $(document).ready(function () {
   };
 
 
+  // This function displays all recipes from the db
+  var displayAllRecipesFromDb = function () {
+    articlesDiv.empty();
+
+    var queryURL = "/recipes";
+
+    // Grab the articles from the db as a json
+    $.getJSON(queryURL, function (data) {
+      if (data.length > 0) {
+        console.log("data: ", data);
+        progressStateDiv.text("Success! Here are your database results!");
+
+        articlesDiv.empty();
+        for (let i = 0; i < data.length; i++) {
+          // console.log("data: ", data[i]);
+          var articleWrap = $('<div class="art clearfix">');
+          // console.log("data[i].id", data[i]._id);
+          articleWrap.attr("data-id", data[i]._id);
+          var articleTitle = data[i].title;
+          var articleLink = data[i].link;
+          var articleImg = data[i].img;
+
+          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
+          articlesDiv.append(articleWrap);
+        }
+
+      } else {
+        progressStateDiv.removeClass("alert-success");
+        progressStateDiv.addClass("alert-warning");
+        progressStateDiv.text("No results from database, something went wrong...");
+      }
+    });
+
+  };
 
 });
