@@ -5,16 +5,11 @@ $(document).ready(function () {
   var contentTitleDiv = $('#content-title');
   var selectDiv = $('<div id="select-div">');
   var pageStateDiv = $('#page-state');
-
   var contentSwapDiv = $('#content-swap');
   var subHeaderDiv = $('<div class="sub-header">');
-
   var jumboDiv = $(".jumbotron");
-
   var progressStateDiv = $('<div id="progress-state" class="alert alert-info" role="alert">');
   progressStateDiv.text(" ");
-
-
   var pageState = 0;
   var sitesArray = [["Keto", "Description", "/scrape/keto"]];
 
@@ -27,6 +22,7 @@ $(document).ready(function () {
     var categoryName = $(this).attr("data-categoryName");
     pageState = state;
     console.log("pageState: ", pageState);
+    selectDiv.empty();
     articlesDiv.empty();
     refreshContentHeader(pageState, categoryName);
   });
@@ -58,8 +54,6 @@ $(document).ready(function () {
   // Display scrape page stuff
   var refreshContentMain1 = function () {
     console.log("refreshContentMain1: ");
-
-
     var scrapeButton = $('<button class="scrape-button btn btn-success">');
     scrapeButton.val(sitesArray[0][2]);
     scrapeButton.text("Scrape New Recipes");
@@ -70,7 +64,7 @@ $(document).ready(function () {
   // Display saved page stuff
   var refreshContentMain2 = function (pageState) {
     selectDiv.empty();
-    displayAllRecipesFromDb();
+    displayScrapedRecipes();
   }
 
   // Initialize App
@@ -91,17 +85,11 @@ $(document).ready(function () {
     console.log("Clicky scrape button");
     console.log("val: ", $(this).val());
     articlesDiv.empty();
-
     var button = $(".scrape-button");
     progressStateDiv.addClass("alert-info");
     progressStateDiv.text("Scraping in progress...");
     progressStateDiv.hide().appendTo(contentTitleDiv).slideDown(500);
-
     var scrapeURL = $(this).val();
-
-    // disable button
-    $(this).addClass("disabled");
-    $(this).attr("disabled", "disabled");
 
     $.getJSON(scrapeURL, function (data, status) {
       if (data.length > 0) {
@@ -110,12 +98,8 @@ $(document).ready(function () {
         console.log("data: ", data);
         console.log("data.length: ", data.length);
         console.log("Status: ", status);
-        if (data[0].batchId) {
-          console.log("batchId: ", data[0].batchId);
-        }
-        // Call function to display the db results of this scrape
-        displayScrapedRecipesFromDb(data[0].batchId);
-
+        // Call function to display the results of this scrape
+        displayScrapedRecipes(data);
       } else {
         console.log("Error: ", status);
       }
@@ -123,94 +107,58 @@ $(document).ready(function () {
 
   });
 
-
-  // This function displays the newly scraped articles from the db
-  var displayScrapedRecipesFromDb = function (batchId) {
-    progressStateDiv.text("Success! Scraping complete! Retrieving articles from our database!");
-    articlesDiv.empty();
-
-    var queryURL = "/recipes/" + batchId;
-    console.log("queryURL: ", queryURL);
-
-    // Grab the articles from the db as a json
-    $.getJSON(queryURL, function (data) {
-      if (data.length > 0) {
-        console.log("data: ", data);
-        progressStateDiv.text("Success! Here are your database results!");
-
-        for (let i = 0; i < data.length; i++) {
-          // console.log("data: ", data[i]);
-          var articleWrap = $('<div class="art clearfix">');
-          // console.log("data[i].id", data[i]._id);
-          articleWrap.attr("data-id", data[i]._id);
-          var articleTitle = data[i].title;
-          var articleLink = data[i].link;
-          var articleImg = data[i].img;
-
-          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
-          articlesDiv.append(articleWrap);
-        }
-
-      } else {
-        progressStateDiv.removeClass("alert-success");
-        progressStateDiv.addClass("alert-warning");
-        progressStateDiv.text("No results from database, something went wrong...");
-      }
-    });
-
+  var displayScrapedRecipes = function (data) {
+    console.log("here: ", data);
+    for (let i = 0; i < data.length; i++) {
+      var title = data[i].title;
+      var img = data[i].img;
+      var link = data[i].link;
+      var titleHeader = $('<h4 class="recipe-title">');
+      titleHeader.append(title);
+      var articleWrapDiv = $('<div class="articleWrapDiv">');
+      var saveButton = $('<button class="save-button btn btn-primary">');
+      saveButton.attr("data-title", title);
+      saveButton.attr("data-img", img);
+      saveButton.attr("data-link", link);
+      saveButton.text("Save Recipe");
+      // var notesButton = $('<button class="notes-button btn btn-primary">');
+      // notesButton.text("Make a Note");
+      articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
+      articleWrapDiv.append(saveButton);
+      articlesDiv.append(articleWrapDiv);
+    }
   };
 
-
-  // This function displays all recipes from the db
-  var displayAllRecipesFromDb = function () {
-    articlesDiv.empty();
-    selectDiv.append(progressStateDiv);
-    progressStateDiv.show();
-
-    var queryURL = "/recipes";
-
-    // Grab the articles from the db as a json
-    $.getJSON(queryURL, function (data) {
-      console.log("data.length: ", data.length);
-      if (data.length > 0) {
-        console.log("data: ", data);
-
-        progressStateDiv.addClass("alert-success");
-        progressStateDiv.text("Success! Here are your database results!");
-
-        for (let i = 0; i < data.length; i++) {
-          // console.log("data: ", data[i]);
-          var articleWrap = $('<div class="art clearfix">');
-          // console.log("data[i].id", data[i]._id);
-          articleWrap.attr("data-id", data[i]._id);
-          var articleTitle = data[i].title;
-          var articleLink = data[i].link;
-          var articleImg = data[i].img;
-          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button type='button' data-toggle='modal' data-target='#exampleModalLong' class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
-          articlesDiv.append(articleWrap);
-        }
-
-      } else {
-        console.log("0");
-        progressStateDiv.show();
-        progressStateDiv.removeClass("alert-success");
-        progressStateDiv.addClass("alert-warning");
-        progressStateDiv.text("Uh Oh. Looks like we don't have any saved articles.");
+  // Click handler for save button
+  $('#articles').on("click", ".save-button", function (event) {
+    console.log("Save button clicky");
+    var button = $(this);
+    var title = $(this).attr("data-title");
+    var img = $(this).attr("data-img");
+    var link = $(this).attr("data-link");
+    // Run a POST request to change the note, using what's entered in the inputs
+    $.ajax({
+      method: "POST",
+      url: "/recipes/save",
+      data: {
+        title: title,
+        img: img,
+        link: link
       }
-    });
-
-  };
-
-  // Click handler for recipe NOTES button:
-  articlesDiv.on("click", ".notes-button", function (event) {
-    var recipeId = $(this).attr("id");
-    console.log("notes-button clicky");
-    console.log("recipeId: ", recipeId);
+    })
+      // With that done
+      .then(function (data) {
+        // Log the response
+        console.log(data);
+        button.text("Saved!");
+        button.attr("disabled", "disabled");
+      });
   });
 
-
-
-
+  // Click handler for notes button
+  $('#articles').on("click", ".notes-button", function (event) {
+    console.log("Notes button clicky");
+  });
 
 
 });

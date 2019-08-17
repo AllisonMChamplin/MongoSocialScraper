@@ -296,3 +296,10 @@ h6 {
     width: 60%;
     float: left;
 }
+
+.articleWrapDiv {
+    background: #fff;
+    padding: 30px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
