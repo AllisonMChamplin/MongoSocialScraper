@@ -33,7 +33,6 @@ $(document).ready(function () {
     progressStateDiv.removeClass("alert-success alert-info alert-warning");
     progressStateDiv.empty();
     progressStateDiv.hide();
-
     if (pageState == 1) {
       console.log("pageState 1 stuff");
       jumboDiv.hide();
@@ -64,7 +63,7 @@ $(document).ready(function () {
   // Display saved page stuff
   var refreshContentMain2 = function (pageState) {
     selectDiv.empty();
-    displayScrapedRecipes();
+    displaySavedRecipes();
   }
 
   // Initialize App
@@ -104,7 +103,6 @@ $(document).ready(function () {
         console.log("Error: ", status);
       }
     });
-
   });
 
   var displayScrapedRecipes = function (data) {
@@ -128,6 +126,34 @@ $(document).ready(function () {
       articlesDiv.append(articleWrapDiv);
     }
   };
+
+  var displaySavedRecipes = function (data) {
+    console.log("here: ", data);
+    articlesDiv.empty();
+    var queryURL = "/recipes";
+    $.getJSON(queryURL, function (data) {
+      console.log("data.length: ", data.length);
+      if (data.length > 0) {
+        console.log("data: ", data);
+        for (let i = 0; i < data.length; i++) {
+          var title = data[i].title;
+          var img = data[i].img;
+          var link = data[i].link;
+          var titleHeader = $('<h4 class="recipe-title">');
+          titleHeader.append(title);
+          var articleWrapDiv = $('<div class="articleWrapDiv">');
+          var notesButton = $('<button class="notes-button btn btn-primary">');
+          notesButton.attr("data-title", title);
+          notesButton.attr("data-img", img);
+          notesButton.attr("data-link", link);
+          notesButton.text("Make a Note");
+          articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
+          articleWrapDiv.append(notesButton);
+          articlesDiv.append(articleWrapDiv);
+        }
+      }
+    });
+  }
 
   // Click handler for save button
   $('#articles').on("click", ".save-button", function (event) {
