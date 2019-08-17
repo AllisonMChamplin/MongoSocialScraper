@@ -160,13 +160,16 @@ label {
 /* Articles List View */
 .art {
     border: 1px solid #fff;
-    padding: 10px;
-    margin: 20px 0;
+    padding: 15px;
     background: #f1f1f1;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .art img {
-    width: 100%;
+    width: 30%;
+    float: left;
+    margin-right: 30px;
 }
 
 body, .container {
@@ -285,4 +288,11 @@ body, .container {
 
 .card img {
     width: 100%;
+}
+
+h6 {
+    font-size: 1.4rem;
+    margin: 15px;
+    width: 60%;
+    float: left;
 }

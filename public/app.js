@@ -97,7 +97,6 @@ $(document).ready(function () {
     progressStateDiv.text("Scraping in progress...");
     progressStateDiv.hide().appendTo(contentTitleDiv).slideDown(500);
 
-
     var scrapeURL = $(this).val();
 
     // disable button
@@ -111,23 +110,12 @@ $(document).ready(function () {
         console.log("data: ", data);
         console.log("data.length: ", data.length);
         console.log("Status: ", status);
-
-        articlesDiv.empty();
-        for (let i = 0; i < data.length; i++) {
-          var articleWrap = $('<div class="card">');
-          var articleTitle = data[i].title;
-          var articleLink = data[i].link;
-          var articleImg = data[i].img;
-          
-          var saveButton = $("<button class='save-recipe'>");
-          saveButton.attr("data-articleTitle", articleTitle);
-          saveButton.attr("data-articleLink", articleLink);
-          saveButton.attr("data-articleImg", articleImg);
-
-          articleWrap.html("<div class='card-body'><h5 class='card-title'>" + articleTitle + "</h5>" + "<a href='" + articleLink + "' target='_blank'>Link</a><img src='" + articleImg + "'>" + "<button class='save-recipe btn btn-primary' data-articleTitle='" + articleTitle + "' data-articleLink='" + articleLink + "' data-articleImg='" + articleImg + "'>Save Recipe</button>" + "</div>");
-          articlesDiv.append(articleWrap);
+        if (data[0].batchId) {
+          console.log("batchId: ", data[0].batchId);
         }
-        
+        // Call function to display the db results of this scrape
+        displayScrapedRecipesFromDb(data[0].batchId);
+
       } else {
         console.log("Error: ", status);
       }
@@ -135,11 +123,43 @@ $(document).ready(function () {
 
   });
 
-  // Click handler for scrape button
-  $("#main").on("click", ".save-recipe", function (event) {
-    console.log("save clicky");
-  });
 
+  // This function displays the newly scraped articles from the db
+  var displayScrapedRecipesFromDb = function (batchId) {
+    progressStateDiv.text("Success! Scraping complete! Retrieving articles from our database!");
+    articlesDiv.empty();
+
+    var queryURL = "/recipes/" + batchId;
+    console.log("queryURL: ", queryURL);
+
+    // Grab the articles from the db as a json
+    $.getJSON(queryURL, function (data) {
+      if (data.length > 0) {
+        console.log("data: ", data);
+        progressStateDiv.text("Success! Here are your database results!");
+
+        articlesDiv.empty();
+        for (let i = 0; i < data.length; i++) {
+          // console.log("data: ", data[i]);
+          var articleWrap = $('<div class="art clearfix">');
+          // console.log("data[i].id", data[i]._id);
+          articleWrap.attr("data-id", data[i]._id);
+          var articleTitle = data[i].title;
+          var articleLink = data[i].link;
+          var articleImg = data[i].img;
+
+          articleWrap.html("<img src='" + articleImg + "'>" + "<h6><a href='#'>" + articleTitle + "</a></h6>" + "<a href='" + articleLink + "' target='_blank'>Link</a>" + "<br><button class='notes-button btn btn-primary' id='" + data[i]._id + "'>NOTES</button>");
+          articlesDiv.append(articleWrap);
+        }
+
+      } else {
+        progressStateDiv.removeClass("alert-success");
+        progressStateDiv.addClass("alert-warning");
+        progressStateDiv.text("No results from database, something went wrong...");
+      }
+    });
+
+  };
 
 
 
