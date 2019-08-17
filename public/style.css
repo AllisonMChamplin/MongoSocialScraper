@@ -128,8 +128,8 @@ textarea {
 
 
 .card-wrap {
-    background: #b0a69b;
-    border: 1px solid #fff;
+    background: #e1cebb;
+    /* border: 1px solid #b3a394; */
 }
 
 /* jQuery UI Select Menu */
@@ -201,7 +201,7 @@ body, .container {
     height: 500px;
     padding: 0;
     font-family: "Cormorant SC", sans-serif;
-    box-shadow: 0px 0px 10px 3px #422b14;
+    box-shadow: 0px 0px 10px 1px #0f1316 inset;
 }
 
 .jumbotron .container {
@@ -247,7 +247,8 @@ body, .container {
     height: 100px;
     padding: 0;
     font-family: "Lato", sans-serif;
-    box-shadow: 0px 0px 10px 3px #422b14;
+    box-shadow: 0px 0px 10px 1px #0f1316 inset;
+    margin-bottom: 20px;
 }
 
 .sub-header h2 {
@@ -256,4 +257,21 @@ body, .container {
     text-align: center;
     top: 30%;
     position: relative;
+}
+
+.navbar-dark {
+    background: #405834 !important;
+}
+
+.btn-primary {
+    /* background: #4f6673 !important; */
+}
+
+.footer {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#progress-state {
+    margin-top: 20px;
 }

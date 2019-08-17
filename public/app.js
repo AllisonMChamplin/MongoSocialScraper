@@ -1,70 +1,123 @@
 $(document).ready(function () {
 
+  // Globals
   var articlesDiv = $("#articles");
   var contentTitleDiv = $('#content-title');
   var selectDiv = $('<div id="select-div">');
-  selectDiv.empty();
-  contentTitleDiv.prepend(selectDiv);
-
-  var pageState = 0;
   var pageStateDiv = $('#page-state');
 
+  var contentSwapDiv = $('#content-swap');
+  var subHeaderDiv = $('<div class="sub-header">');
+
   var jumboDiv = $(".jumbotron");
-  var subHeaderDiv = $(".sub-header");
-  subHeaderDiv.hide();
+
   var progressStateDiv = $('<div id="progress-state">');
   progressStateDiv.text(" ");
 
+  var pageState = 0;
   var sitesArray = [["Keto", "Description", "/scrape/keto"]];
 
-
-  // This function updates the page content based on the page state
-  var refreshContent = function (pageState, categoryName, scrapeURL) {
-    console.log("refreshcontent");
+  // Click handler for nav
+  $('.nav-link').on("click", function (event) {
+    console.log("Clicky nav");
+    $(".nav-link.active").removeClass("active");
+    $(this).addClass("active");
+    var state = $(this).attr("data-pageState");
+    var categoryName = $(this).attr("data-categoryName");
+    pageState = state;
     console.log("pageState: ", pageState);
-    // if (pageState == 0) {
-    //   jumboDiv.slideDown("fast");
-    // }
-    if (pageState == 1) {
-      jumboDiv.slideUp("fast");
-      subHeaderDiv.append("<h2>" + categoryName + "</h2>");
-      subHeaderDiv.slideDown("fast");
-      selectDiv.empty();
-      var header = "<h3>Select an option</h3><br>";
-      selectDiv.append(header);
-      for (let i = 0; i < sitesArray.length; i++) {
-        var card = $('<div class="card" style="width: 30%">');
-        var cardBody = $('<div class="card-body">');
-        var h5 = $('<h5 class="card-title">');
-        h5.text(sitesArray[i][0]);
-        var p = $('<p class="card-text">');
-        p.text(sitesArray[i][1]);
-        var link = $('<a href="#" class="btn btn-primary">');
-        link.attr("href", sitesArray[i][2]);
-        link.text("Scrape New Articles");
-        cardBody.append(h5, p, link);
-        card.append(cardBody);
-        selectDiv.append(card);
-      }
+    refreshContentHeader(pageState, categoryName);
+  });
 
-    } else if (pageState == 2 || pageState == 3) {
+  var refreshContentHeader = function (pageState, categoryName) {
+    console.log("refreshing");
+    console.log("pageState: ", pageState);
+    selectDiv.empty();
+
+    if (pageState == 1) {
+      console.log("pageState 1 stuff");
       jumboDiv.slideUp("fast");
-      subHeaderDiv.slideDown("fast");
-    } else if (pageState == 4) {
-      jumboDiv.slideUp("fast");
-      subHeaderDiv.slideDown("fast");
       subHeaderDiv.empty();
       subHeaderDiv.append("<h2>" + categoryName + "</h2>");
-      var scrapeButton = $('<button class="scrape-button btn btn-primary">');
-      scrapeButton.val(scrapeURL);
-      scrapeButton.text("Scrape this");
-      selectDiv.empty();
-      selectDiv.html("<h3>" + categoryName + "</h3><br>");
-      selectDiv.append(scrapeButton);
-      contentTitleDiv.prepend(selectDiv);
-      contentTitleDiv.append(progressStateDiv);
+      subHeaderDiv.hide().appendTo(contentSwapDiv).slideDown(500);
+      refreshContentMain1(pageState);
+    } else if (pageState == 2) {
+      console.log("pageState 2 stuff");
+      jumboDiv.slideUp("fast");
+      subHeaderDiv.empty();
+      subHeaderDiv.append("<h2>" + categoryName + "</h2>");
+      subHeaderDiv.hide().appendTo(contentSwapDiv).slideDown(500);
+      refreshContentMain2(pageState);
     }
   };
+
+  // Display scrape page stuff
+  var refreshContentMain1 = function (pageState) {
+    selectDiv.slideUp("fast");
+    selectDiv.empty();
+    // selectDiv.append("<h3>How it Works</h3>");
+    // selectDiv.append("<p>Click on the button to scrape new recipes!</p>");
+
+    var scrapeButton = $('<button class="scrape-button btn btn-success">');
+    scrapeButton.val(sitesArray[0][2]);
+    scrapeButton.text("Scrape New Recipes");
+    selectDiv.append(scrapeButton);
+
+    selectDiv.slideDown("fast");
+  }
+
+  // Display saved page stuff
+  var refreshContentMain2 = function (pageState) {
+    selectDiv.slideUp("fast");
+    selectDiv.empty();
+    selectDiv.text("pageState 2 stuff");
+    selectDiv.slideDown("fast");
+  }
+
+  // Initialize App
+  var initializeContent = function (pageState) {
+    contentTitleDiv.prepend(selectDiv);
+    subHeaderDiv.hide();
+    selectDiv.empty();
+    selectDiv.text("Homepage content.");
+    jumboDiv.slideDown("fast");
+    subHeaderDiv.hide();
+    $(".nav-item:first-child a").addClass("active");
+  };
+  initializeContent(0);
+
+
+  // Click handler for scrape button
+  contentTitleDiv.on("click", ".scrape-button", function (event) {
+    console.log("Clicky scrape button");
+    console.log("val: ", $(this).val());
+    var button = $(".scrape-button");
+    progressStateDiv.addClass("alert");
+    progressStateDiv.text("Scraping in progress...");
+    progressStateDiv.hide().appendTo(contentTitleDiv).slideDown(500);
+    var scrapeURL = $(this).val();
+
+    // disable button
+    $(this).addClass("disabled");
+    $(this).attr("disabled", "disabled");
+
+    $.getJSON(scrapeURL, function (data, status) {
+      if (data.length > 0) {
+        progressStateDiv.addClass("alert-success");
+        progressStateDiv.text("Success! Scraping complete!");
+        console.log("data: ", data);
+        console.log("data.length: ", data.length);
+        console.log("Status: ", status);
+        if (data[0].batchId) {
+          console.log("batchId: ", data[0].batchId);
+        }
+        // Call function to display the db results of this scrape
+        displayScrapedRecipesFromDb(data[0].batchId);
+      } else {
+        console.log("Error: ", status);
+      }
+    });
+  });
 
   // This function displays the newly scraped articles from the db
   var displayScrapedRecipesFromDb = function (batchId) {
@@ -103,183 +156,7 @@ $(document).ready(function () {
 
   };
 
-  var initializeContent = function (pageState) {
-    selectDiv.empty();
-    selectDiv.text("Homepage content.");
-    jumboDiv.slideDown("fast");
-    subHeaderDiv.hide();
-    $(".nav-link.active").removeClass("active");
-    $("#menu li:first-child a").addClass("active");
-  };
-
-  initializeContent(0);
-
-
-  // CLICK HANDLERS // // // // // // // // // // // // // // // // // // //
-
-  // Click handler for nav
-  $('.nav-link').on("click", function (event) {
-    console.log("Clicky nav");
-
-    $(".nav-link.active").removeClass("active");
-    $(this).addClass("active");
-
-    var state = $(this).attr("data-pageState");
-    pageState = state;
-    console.log("pageState: ", pageState);
-    var navId = $(this).attr("id");
-    console.log("navId: ", navId);
-
-    var categoryName = $(this).attr("data-categoryName");
-    var scrapeURL = $(this).attr("data-scrapeURL");
-    pageStateDiv.html("Page State: " + pageState + " Category Name: " + categoryName + " Scrape URL: " + scrapeURL);
-    $(".scrape-button").remove();
-    $("#articles").empty();
-
-    if (pageState == 0) {
-      initializeContent(0);
-    } else {
-      progressStateDiv.removeClass("alert", "alert-warning", "alert-success");
-      progressStateDiv.text(" ");
-      refreshContent(pageState, categoryName, scrapeURL);
-    }
-  });
-
-  // Click handler for scrape button
-  contentTitleDiv.on("click", ".scrape-button", function (event) {
-    console.log("Clicky scrape button");
-    progressStateDiv.addClass("alert");
-    progressStateDiv.text("Scraping in progress...");
-
-    var scrapeURL = $(this).val();
-
-    // disable button
-    $(this).addClass("disabled");
-    $(this).attr("disabled", "disabled");
-
-    $.getJSON(scrapeURL, function (data, status) {
-      if (data.length > 0) {
-        progressStateDiv.addClass("alert-success");
-        progressStateDiv.text("Success! Scraping complete!");
-        console.log("data: ", data);
-        console.log("data.length: ", data.length);
-        console.log("Status: ", status);
-        if (data[0].batchId) {
-          console.log("batchId: ", data[0].batchId);
-        }
-        // Call function to display the db results of this scrape
-        displayScrapedRecipesFromDb(data[0].batchId);
-      } else {
-        console.log("Error: ", status);
-      }
-    });
-  });
-
-  // Click handler for recipe NOTES button:
-  articlesDiv.on("click", ".notes-button", function (event) {
-    var recipeId = $(this).attr("id");
-    console.log("notes-button clicky");
-    console.log("recipeId: ", recipeId);
-  });
 
 
 
-
-
-
-
-  // var selectMenuOptionState;
-  // // Initialize SelectMenu
-  // $(function () {
-  //   $("#sites").selectmenu();
-  // });
-  // $('#sites').on('selectmenuchange', function () {
-  //   var v = $(this).val();
-  //   selectMenuOptionState = $(this).val();
-  //   console.log("v: ", $(this).val());
-  //   if (v) {
-  //     // Grab the articles as a json
-  //     $.getJSON(v, function (data) {
-  //       if (data) {
-  //         // Clear the div
-  //         articlesDiv.empty();
-  //         // For each one
-  //         for (var i = 0; i < data.length; i++) {
-  //           // Display the apropos information on the page
-  //           // articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br><a href='" + data[i].link + "' target='_blank'>Link</a>" + "<br /></p>");
-  //           articlesDiv.append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br></p>");
-  //         }
-  //       }
-  //     });
-  //   }
-  // });
-  // // Grab the articles as a json
-  // $.getJSON("/articles", function (data) {
-  //   // For each one
-  //   for (var i = 0; i < data.length; i++) {
-  //     // Display the apropos information on the page
-  //     $("#articles").append("<p data-id='" + data[i]._id + "'>" + "<a href='" + data[i].link + "' target='_blank'>" + data[i].title + "</a>" + "<br /></p>");
-  //   }
-  // });
-
-
-  // // Whenever someone clicks a p tag
-  // $(document).on("click", "p", function () {
-  //   // Empty the notes from the note section
-  //   $("#notes").empty();
-  //   // Save the id from the p tag
-  //   var thisId = $(this).attr("data-id");
-  //   // Now make an ajax call for the Article
-  //   $.ajax({
-  //     method: "GET",
-  //     // url: "/articles/" + thisId
-  //     url: selectMenuOptionState + "/" + thisId
-  //   })
-  //     // With that done, add the note information to the page
-  //     .then(function (data) {
-  //       console.log(data);
-  //       // The title of the article
-  //       $("#notes").append("<h2>" + data.title + "</h2>");
-  //       // An input to enter a new title
-  //       $("#notes").append("<input id='titleinput' name='title' >");
-  //       // A textarea to add a new note body
-  //       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-  //       // A button to submit a new note, with the id of the article saved to it
-  //       $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
-  //       // If there's a note in the article
-  //       if (data.note) {
-  //         // Place the title of the note in the title input
-  //         $("#titleinput").val(data.note.title);
-  //         // Place the body of the note in the body textarea
-  //         $("#bodyinput").val(data.note.body);
-  //       }
-  //     });
-  // });
-
-  // // When you click the savenote button
-  // $(document).on("click", "#savenote", function () {
-  //   // Grab the id associated with the article from the submit button
-  //   var thisId = $(this).attr("data-id");
-  //   // Run a POST request to change the note, using what's entered in the inputs
-  //   $.ajax({
-  //     method: "POST",
-  //     url: "/articles/" + thisId,
-  //     data: {
-  //       // Value taken from title input
-  //       title: $("#titleinput").val(),
-  //       // Value taken from note textarea
-  //       body: $("#bodyinput").val()
-  //     }
-  //   })
-  //     // With that done
-  //     .then(function (data) {
-  //       // Log the response
-  //       console.log(data);
-  //       // Empty the notes section
-  //       $("#notes").empty();
-  //     });
-  //   // Also, remove the values entered in the input and textarea for note entry
-  //   $("#titleinput").val("");
-  //   $("#bodyinput").val("");
-  // });
 });

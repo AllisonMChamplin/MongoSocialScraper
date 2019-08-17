@@ -26,16 +26,12 @@
 
 <body data-spy="scroll" data-target="#navbarTarget" id="page-top">
 
-    <span id="page-state"></span><br>
-    <!-- Progress State: <span id="progress-state"></span> -->
-
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="d-flex flex-grow-1">
             <span class="w-100 d-lg-none d-block">
                 <!-- hidden spacer to center brand on mobile --></span>
             <a class="navbar-brand" href="/">
-                MongoRecipes
+                MongoRecipeScraper
             </a>
             <div class="w-100 text-right">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
@@ -46,136 +42,67 @@
         <div class="collapse navbar-collapse flex-grow-1 text-right">
             <ul class="navbar-nav ml-auto flex-nowrap">
                 <li class="nav-item">
-                    <a href="/" class="nav-link" data-pageState=0 data-categoryName="Home" data-getURL="/">Home</a>
+                    <a href="/" class="nav-link" data-pageState=0 data-categoryName="Home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-pageState=1 data-categoryName="Scrape New Recipes"
-                        data-getURL="/">Scrape New Recipes</a>
+                    <a href="#" class="nav-link" data-pageState=1 data-categoryName="Scrape New Recipes">Scrape New
+                        Recipes</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-pageState=2 data-categoryName="Home" data-getURL="/recipes">View
-                        Saved</a>
+                    <a href="#" class="nav-link" data-pageState=2 data-categoryName="View Saved Recipes">View
+                        Saved Recipes</a>
                 </li>
-
-                <!-- 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Link</a>
-                </li> -->
             </ul>
         </div>
     </nav>
 
-
-    <!-- <div class="row">
-            <div class="col">
-                <div class="container">
-                    <small>Scrape some new food ideas!</small>
-                    <nav>
-                        <ul id="menu" class="unstyled">
-                            <li>
-                                <a class="content-link" data-pageState=0 data-categoryName="Home" data-getURL="/">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a class="content-link" data-pageState=1 data-categoryName="Vegan Recipes"
-                                    data-scrapeURL="#">
-                                    Vegan Recipes
-                                </a>
-                            </li>
-                            <li>
-                                <a class="content-link" data-pageState=2 data-categoryName="Keto Recipes"
-                                    data-scrapeURL="/scrape-keto">
-                                    Keto Recipes
-                                </a>
-                            </li>
-                            <li>
-                                <a class="content-link" data-pageState=3 data-categoryName="Vegan-Keto Recipes"
-                                    data-scrapeURL="#">
-                                    Vegan-Keto Recipes
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div> -->
-
-
-
-
-    <!-- </div> -->
-
+    <div id="content-swap"></div>
 
     <div class="jumbotron jumbotron-fluid text-center">
         <div class="container">
             <div class="caption">
                 <h1 class="display-4">Recipe Scraper</h1>
                 <p class="lead">Scrape some new food ideas!</p>
-                <button class="btn btn-primary">Scrape some recipes!</button>
-                <button class="btn btn-primary">View saved recipes!</button>
+                <button class="btn btn-success">Scrape some recipes!</button>
+                <button class="btn btn-success">View saved recipes!</button>
             </div>
         </div>
     </div>
 
-    <div class="sub-header"></div>
+    <!-- <div class="sub-header"></div> -->
 
     <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col" id="main">
-                    <div class="container card-wrap my-5 p-4 drop-shadow">
-                        <div class="row">
-                            <div class="col" id="content-title"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col" id="articles"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="col-sm-3" id="right">
-                <div class="container card-wrap my-5 p-4 drop-shadow">
+        <div class="row">
+            <div class="col" id="main">
+                <div class="container card-wrap p-4 drop-shadow">
                     <div class="row">
-                        <div class="col" id="notes">
-                            <h3>Notes</h3>
-                        </div>
+                        <div class="col" id="content-title"></div>
                     </div>
-                </div>
-            </div> -->
-            </div>
-            <div class="row footer">
-                <div class="col">
-                    <div class="container">
-                        Mongo Recipe Scraper | Photo Credits: <a href="https://pixabay.com/" target="_blank"
-                            title="Photo credit: Pixabay.com">Pixabay.com</a>
+                    <div class="row">
+                        <div class="col" id="articles"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row footer">
+            <div class="col">
+                <div class="container">
+                    Mongo Recipe Scraper | Photo Credits: <a href="https://pixabay.com/" target="_blank"
+                        title="Photo credit: Pixabay.com">Pixabay.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-        <script src="app.js"></script>
+    <span id="page-state"></span><br>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
