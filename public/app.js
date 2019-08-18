@@ -70,8 +70,8 @@ $(document).ready(function () {
   var initializeContent = function (pageState) {
     contentTitleDiv.prepend(selectDiv);
     subHeaderDiv.hide();
-    selectDiv.empty();
-    selectDiv.text("Homepage content.");
+    selectDiv.hide();
+    // selectDiv.text("Homepage content.");
     jumboDiv.slideDown("fast");
     subHeaderDiv.hide();
     $(".nav-item:first-child a").addClass("active");
@@ -108,23 +108,50 @@ $(document).ready(function () {
 
   var displayScrapedRecipes = function (data) {
     console.log("here: ", data);
+    articlesDiv.empty();
     for (let i = 0; i < data.length; i++) {
-      var title = data[i].title;
       var img = data[i].img;
+      var title = data[i].title;
       var link = data[i].link;
-      var titleHeader = $('<h4 class="recipe-title">');
-      titleHeader.append(title);
-      var articleWrapDiv = $('<div class="articleWrapDiv">');
+      var card = $('<div class="card">');
+      var cardImage = $('<img class="card-img-top">');
+      cardImage.attr("src", img);
+      var cardBody = $('<div class="card-body">');
+      var cardTitleHeader = $('<h5 class="card-title">');
+      cardTitleHeader.text(title);
+      var cardText = $('<p class="card-text">');
       var saveButton = $('<button class="save-button btn btn-primary">');
       saveButton.attr("data-title", title);
       saveButton.attr("data-img", img);
       saveButton.attr("data-link", link);
       saveButton.text("Save Recipe");
-      articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
-      articleWrapDiv.append(saveButton);
-      articlesDiv.append(articleWrapDiv);
+      cardBody.append(cardTitleHeader, saveButton);
+      card.append(cardImage, cardBody);
+      articlesDiv.append(card);
     }
   };
+
+
+  // var displayScrapedRecipes = function (data) {
+  //   console.log("here: ", data);
+  //   articlesDiv.empty();
+  //   for (let i = 0; i < data.length; i++) {
+  //     var title = data[i].title;
+  //     var img = data[i].img;
+  //     var link = data[i].link;
+  //     var titleHeader = $('<h4 class="recipe-title">');
+  //     titleHeader.append(title);
+  //     var articleWrapDiv = $('<div class="articleWrapDiv">');
+  //     var saveButton = $('<button class="save-button btn btn-primary">');
+  //     saveButton.attr("data-title", title);
+  //     saveButton.attr("data-img", img);
+  //     saveButton.attr("data-link", link);
+  //     saveButton.text("Save Recipe");
+  //     articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
+  //     articleWrapDiv.append(saveButton);
+  //     articlesDiv.append(articleWrapDiv);
+  //   }
+  // };
 
   // Click handler for save button
   $('#articles').on("click", ".save-button", function (event) {
@@ -162,23 +189,10 @@ $(document).ready(function () {
         for (let i = 0; i < data.length; i++) {
           console.log("data.title: ", data[i].title);
           console.log("data.note: ", data[i].note);
-
-          //           <div class="card" style="width: 18rem;">
-          //             <img src="..." class="card-img-top" alt="...">
-          //               <div class="card-body">
-          //                 <h5 class="card-title">Card title</h5>
-          //                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          //                 <a href="#" class="btn btn-primary">Go somewhere</a>
-          //               </div>
-          //            </div>
-
-
-
           var img = data[i].img;
           var title = data[i].title;
           var link = data[i].link;
           var id = data[i]._id;
-
           var card = $('<div class="card">');
           card.attr("id", id);
           var cardImage = $('<img class="card-img-top">');
@@ -187,13 +201,11 @@ $(document).ready(function () {
           var cardTitleHeader = $('<h5 class="card-title">');
           cardTitleHeader.text(title);
           var cardText = $('<p class="card-text">');
-
           var notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
           notesButton.attr("data-title", title);
           notesButton.attr("data-img", img);
           notesButton.attr("data-link", link);
-
           if (data[i].note) {
             console.log("Yes there's a note");
             notesButton.addClass("btn-success");
@@ -205,15 +217,9 @@ $(document).ready(function () {
             notesButton.addClass("btn-primary");
             notesButton.text("Make a Note");
           }
-
-          // articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
-          // articleWrapDiv.append(notesButton);
-          // articlesDiv.append(articleWrapDiv);
-
           cardBody.append(cardTitleHeader, notesButton);
           card.append(cardImage, cardBody);
           articlesDiv.append(card);
-
         }
       }
     });

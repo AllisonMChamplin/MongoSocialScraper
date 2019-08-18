@@ -313,3 +313,9 @@ h6 {
 .card-title {
     height: 50px;
 }
+
+.note {
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
