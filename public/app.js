@@ -148,7 +148,13 @@ $(document).ready(function () {
       let title = data[i].title;
       if (title != "") {
         let img = data[i].img;
-        let link = data[i].link;
+        let link = "";
+        if (buttonId == "scrape-vegan") {
+          link = "https://www.shape.com" + data[i].link;
+        } else {
+          link = data[i].link;
+        }
+
         let description = data[i].description;
         let card = $('<div class="card">');
         let cardImg = $('<img class="card-img-top">');
