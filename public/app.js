@@ -224,35 +224,37 @@ $(document).ready(function () {
       if (data.length == 0) {
         articlesDiv.html("<p>There are no saved recipes.</p>");
       } else {
+        articlesDiv.html("<p>There are " + data.length + " saved recipes.</p>");
+
+        var savedWrap = $('<div class="savedWrap">');
+
         for (let i = 0; i < data.length; i++) {
+
           var title = data[i].title;
           var img = data[i].img;
           var link = data[i].link;
           var id = data[i]._id;
           var tag = data[i].tag;
           var description = data[i].description;
-          var tag = data[i].tag;
 
           let card = $('<div class="card">');
-          let cardImg = $('<img class="card-img-top">');
-          cardImg.attr("src", img);
-          cardImg.attr("alt", title);
           let cardBody = $('<div class="card-body">');
+
+          let imgTag = $('<img class="saved-card-img">');
+          imgTag.attr("src", img);
+          imgTag.attr("alt", title);
+          cardBody.append(imgTag);
 
           let cardTitle = $('<h5 class="card-title">');
           cardTitle.text(title);
-
-          let cardFooter = $('<div class="card-footer">');
-          let cardUpdated = $('<small class="text-muted">');
-          cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
-          cardFooter.append(cardUpdated);
-
           cardBody.append(cardTitle);
+
           if (description) {
             let cardDescription = $('<p class="card-text">');
             cardDescription.text(data[i].description);
             cardBody.append(cardDescription);
           }
+
           let cardListGroup = $('<ul class="list-group  list-group-flush">');
           let cardListItemLink = $('<li class="list-group-item">');
           let cardLink = $('<a class="card-link" target="_blank">');
@@ -277,9 +279,10 @@ $(document).ready(function () {
             notesButton.addClass("btn-primary");
             notesButton.text("Make a Note");
           }
-          card.append(cardImg, cardBody, cardListGroup, cardFooter, notesButton);
-          articlesDiv.append(card);
 
+          card.append(cardBody, cardListGroup, notesButton);
+          savedWrap.append(card);
+          articlesDiv.append(savedWrap);
         }
       }
     });

@@ -377,3 +377,21 @@ h6 {
 .note input {
     margin: 5px 0;
 }
+
+.saved-card-img {
+    float: right;
+    width: 200px;
+}
+
+.savedWrap .card {
+    width: 45%;
+}
+
+.savedWrap .card-body {
+    min-height: 300px;
+}
+
+.saved-card-img {
+    float: right;
+    width: 159px !important;
+}
