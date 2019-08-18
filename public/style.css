@@ -128,7 +128,7 @@ textarea {
 
 
 .card-wrap {
-    background: #ac9d8e;
+    /* background: #ac9d8e; */
     /* border: 1px solid #b3a394; */
 }
 
@@ -318,4 +318,8 @@ h6 {
     margin: 20px 0;
     border: 1px solid #ccc;
     padding: 20px;
+}
+
+.scrape-button {
+    margin: 20px 0;
 }

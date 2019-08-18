@@ -118,7 +118,7 @@ $(document).ready(function () {
       cardImage.attr("src", img);
       var cardBody = $('<div class="card-body">');
       var cardTitleHeader = $('<h5 class="card-title">');
-      cardTitleHeader.text(title);
+      cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
       var cardText = $('<p class="card-text">');
       var saveButton = $('<button class="save-button btn btn-primary">');
       saveButton.attr("data-title", title);
@@ -199,7 +199,7 @@ $(document).ready(function () {
           cardImage.attr("src", img);
           var cardBody = $('<div class="card-body">');
           var cardTitleHeader = $('<h5 class="card-title">');
-          cardTitleHeader.text(title);
+          cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
           var cardText = $('<p class="card-text">');
           var notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
