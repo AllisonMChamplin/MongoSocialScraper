@@ -19,7 +19,12 @@ var RecipeSchema = new Schema({
     // `img` is not required and of type String
     img: {
         type: String,
-        required: true
+        required: false
+    },
+    // `tag` is not required and of type String
+    tag: {
+        type: String,
+        required: false
     },
     // `note` is an object that stores a Note id
     // The ref property links the ObjectId to the Note model

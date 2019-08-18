@@ -11,7 +11,11 @@ $(document).ready(function () {
   var progressStateDiv = $('<div id="progress-state" class="alert alert-info" role="alert">');
   progressStateDiv.text(" ");
   var pageState = 0;
-  var sitesArray = [["Keto", "Description", "/scrape/keto"]];
+  var sitesArray = [["Keto", "Description", "/scrape/keto"], ["Vegan", "Description", "/scrape/vegan"], ["Vegan-Keto", "Description", "/scrape/vegan-keto"]];
+
+  var keto = sitesArray[0][2];
+  var vegan = sitesArray[1][2];
+  var veganKeto = sitesArray[2][2];
 
   // Click handler for nav
   $('.nav-link').on("click", function (event) {
@@ -53,10 +57,16 @@ $(document).ready(function () {
   // Display scrape page stuff
   var refreshContentMain1 = function () {
     console.log("refreshContentMain1: ");
-    var scrapeButton = $('<button class="scrape-button btn btn-success">');
-    scrapeButton.val(sitesArray[0][2]);
-    scrapeButton.text("Scrape New Recipes");
-    selectDiv.append(scrapeButton);
+    var scrapeButtonKeto = $('<button class="scrape-button btn btn-success" id="scrape-keto" style="margin-right: 20px;">');
+    scrapeButtonKeto.val(keto);
+    scrapeButtonKeto.text("Scrape Keto Recipes");
+    var scrapeButtonVegan = $('<button class="scrape-button btn btn-success" id="scrape-vegan" style="margin-right: 20px;">');
+    scrapeButtonVegan.val(vegan);
+    scrapeButtonVegan.text("Scrape Vegan Recipes");
+    var scrapeButtonVeganKeto = $('<button class="scrape-button btn btn-success" id="scrape-vegan-keto" style="margin-right: 20px;">');
+    scrapeButtonVeganKeto.val(veganKeto);
+    scrapeButtonVeganKeto.text("Scrape Vegan-Keto Recipes");
+    selectDiv.append(scrapeButtonKeto, scrapeButtonVegan, scrapeButtonVeganKeto);
     selectDiv.slideDown("fast");
   }
 
@@ -85,10 +95,12 @@ $(document).ready(function () {
     console.log("Clicky scrape button");
     console.log("val: ", $(this).val());
     articlesDiv.empty();
-    var button = $(".scrape-button");
     progressStateDiv.addClass("alert-info");
     progressStateDiv.text("Scraping in progress...");
     progressStateDiv.hide().appendTo(contentTitleDiv).slideDown(500);
+    var buttonId = $(this).attr("id");
+    console.log("buttonId: ", buttonId);
+
     var scrapeURL = $(this).val();
 
     $.getJSON(scrapeURL, function (data, status) {
@@ -99,35 +111,43 @@ $(document).ready(function () {
         console.log("data.length: ", data.length);
         console.log("Status: ", status);
         // Call function to display the results of this scrape
-        displayScrapedRecipes(data);
+        displayScrapedRecipes(data, buttonId);
       } else {
         console.log("Error: ", status);
       }
     });
   });
 
-  var displayScrapedRecipes = function (data) {
-    console.log("here: ", data);
+  var displayScrapedRecipes = function (data, buttonId) {
+    console.log("data: 121212", data);
+    console.log("buttonId: 121212", buttonId);
+
     articlesDiv.empty();
-    for (let i = 0; i < data.length; i++) {
-      var img = data[i].img;
-      var title = data[i].title;
-      var link = data[i].link;
-      var card = $('<div class="card">');
-      var cardImage = $('<img class="card-img-top">');
-      cardImage.attr("src", img);
-      var cardBody = $('<div class="card-body">');
-      var cardTitleHeader = $('<h5 class="card-title">');
-      cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
-      var cardText = $('<p class="card-text">');
-      var saveButton = $('<button class="save-button btn btn-primary">');
-      saveButton.attr("data-title", title);
-      saveButton.attr("data-img", img);
-      saveButton.attr("data-link", link);
-      saveButton.text("Save Recipe");
-      cardBody.append(cardTitleHeader, saveButton);
-      card.append(cardImage, cardBody);
-      articlesDiv.append(card);
+    if (buttonId == "scrape-keto") {
+      for (let i = 0; i < data.length; i++) {
+        var img = data[i].img;
+        var title = data[i].title;
+        var link = data[i].link;
+        var tag = "Keto";
+        var card = $('<div class="card">');
+        var cardImage = $('<img class="card-img-top">');
+        cardImage.attr("src", img);
+        var cardBody = $('<div class="card-body">');
+        var cardTitleHeader = $('<h5 class="card-title">');
+        cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
+        var cardText = $('<p class="card-text">');
+        var saveButton = $('<button class="save-button btn btn-primary">');
+        saveButton.attr("data-title", title);
+        saveButton.attr("data-img", img);
+        saveButton.attr("data-link", link);
+        saveButton.attr("data-tag", tag);
+        saveButton.text("Save Recipe");
+        cardBody.append(cardTitleHeader, saveButton);
+        card.append(cardImage, cardBody);
+        articlesDiv.append(card);
+      }
+    } else {
+      console.log("Else");
     }
   };
 
@@ -160,6 +180,7 @@ $(document).ready(function () {
     var title = $(this).attr("data-title");
     var img = $(this).attr("data-img");
     var link = $(this).attr("data-link");
+    var tag = $(this).attr("data-tag");
     // Run a POST request to save the recipe
     $.ajax({
       method: "POST",
@@ -167,7 +188,8 @@ $(document).ready(function () {
       data: {
         title: title,
         img: img,
-        link: link
+        link: link,
+        tag: tag
       }
     })
       // With that done
@@ -184,8 +206,10 @@ $(document).ready(function () {
     var queryURL = "/recipes";
     $.getJSON(queryURL, function (data) {
       console.log("data.length: ", data.length);
-      if (data.length > 0) {
-        console.log("data: ", data);
+      console.log("data: ", data);
+      if (data.length == 0) {
+        articlesDiv.html("<p>There are no saved recipes.</p>");
+      } else {
         for (let i = 0; i < data.length; i++) {
           console.log("data.title: ", data[i].title);
           console.log("data.note: ", data[i].note);
@@ -193,6 +217,7 @@ $(document).ready(function () {
           var title = data[i].title;
           var link = data[i].link;
           var id = data[i]._id;
+          var tag = data[i].tag;
           var card = $('<div class="card">');
           card.attr("id", id);
           var cardImage = $('<img class="card-img-top">');
@@ -201,6 +226,7 @@ $(document).ready(function () {
           var cardTitleHeader = $('<h5 class="card-title">');
           cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
           var cardText = $('<p class="card-text">');
+          cardText.html("Tag: " + tag);
           var notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
           notesButton.attr("data-title", title);
@@ -217,7 +243,7 @@ $(document).ready(function () {
             notesButton.addClass("btn-primary");
             notesButton.text("Make a Note");
           }
-          cardBody.append(cardTitleHeader, notesButton);
+          cardBody.append(cardTitleHeader, cardText, notesButton);
           card.append(cardImage, cardBody);
           articlesDiv.append(card);
         }
