@@ -169,6 +169,7 @@ $(document).ready(function () {
           var titleHeader = $('<h4 class="recipe-title">');
           titleHeader.append(title);
           var articleWrapDiv = $('<div class="articleWrapDiv">');
+          articleWrapDiv.attr("id", id);
           var notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
           notesButton.attr("data-title", title);
@@ -201,9 +202,9 @@ $(document).ready(function () {
   $('#articles').on("click", ".notes-button", function (event) {
     console.log("Notes button clicky");
     var recipeDiv = $(this).parent();
-    var titleinput = $('<input id="titleinput">');
-    var bodyinput = $('<input id="bodyinput">');
     var id = $(this).attr("id");
+    var titleinput = $('<input id="titleinput" class="form-control" type="text">');
+    var bodyinput = $('<input id="bodyinput" class="form-control" type="text">');
     $(this).attr("disabled", "disabled");
     var notesavebutton = $('<button class="notes-save-button" id="' + id + '">Save Note</button>');
     recipeDiv.append(titleinput, bodyinput, notesavebutton);
@@ -240,6 +241,7 @@ $(document).ready(function () {
   // Click handler for save note button
   $('#articles').on("click", ".notes-save-button", function (event) {
     console.log("Notes save button clicky");
+    var parent = $(this).parent();
     var button = $(this);
     var id = $(this).attr("id");
     var title = $("#titleinput").val();
@@ -259,6 +261,8 @@ $(document).ready(function () {
         console.log("postdata: ", data);
         button.text("Saved note!");
         button.attr("disabled", "disabled");
+        parent.children("input").attr("disabled", "disabled");
+        parent.children("input").attr("id", "disabledInput");
       });
   });
 
