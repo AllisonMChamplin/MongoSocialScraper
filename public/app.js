@@ -195,24 +195,43 @@ $(document).ready(function () {
     var img = $(this).attr("data-img");
     var link = $(this).attr("data-link");
     var tag = $(this).attr("data-tag");
-    // Run a POST request to save the recipe
+
     $.ajax({
-      method: "POST",
-      url: "/recipes/save",
-      data: {
-        title: title,
-        img: img,
-        link: link,
-        tag: tag
-      }
-    })
-      // With that done
-      .then(function (data) {
-        // Log the response
-        console.log(data);
-        button.text("Saved!");
+      method: "GET",
+      url: "/recipes/" + title
+    }).then(function (data) {
+      // Log the response
+      console.log("promise1data", data);
+      if (data === null) {
+        console.log("do save stuff");
+
+        // Run a POST request to save the recipe
+        $.ajax({
+          method: "POST",
+          url: "/recipes/save",
+          data: {
+            title: title,
+            img: img,
+            link: link,
+            tag: tag
+          }
+        })
+          // With that done
+          .then(function (data) {
+            // Log the response
+            console.log(data);
+            button.text("Saved!");
+            button.attr("disabled", "disabled");
+          });
+
+      } else {
+        console.log("disable save button");
+        button.text("Recipe Already Saved!");
         button.attr("disabled", "disabled");
-      });
+      }
+    });
+
+
   });
 
   var displaySavedRecipes = function () {

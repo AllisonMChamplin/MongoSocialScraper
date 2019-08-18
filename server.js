@@ -105,8 +105,25 @@ app.get("/recipes", function (req, res) {
         });
 });
 
+// Route for checking if reipe alrady is saved
+app.get("/recipes/:title", function (req, res) {
+    console.log("HERE", req.params.title);
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    db.Recipe.findOne({ title: req.params.title })
+        .then(function (dbRecipe) {
+            console.log("dbRecipe: ", dbRecipe);
+            // If we were able to successfully find a Recipe with the given id, send it back to the client
+            res.json(dbRecipe);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
+});
+
 // Route to save a recipe to the db
 app.post("/recipes/save", function (req, res) {
+
     console.log("req.body: ", req.body);
     db.Recipe.create(req.body)
         .then(function (dbRecipe) {
