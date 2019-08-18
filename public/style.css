@@ -15,10 +15,11 @@ body {
     font-family: 'Roboto', sans-serif;
     color: #5d514a;
     font-size: 1.2em;
+    padding-top: 60px;
 }
 
 a, a:visited {
-    color: #4f6673;
+    color: #2796d7;
 }
 
 a:hover {
@@ -132,6 +133,12 @@ textarea {
     /* border: 1px solid #b3a394; */
 }
 
+.card-body {
+    line-height: 1.1em;
+    font-size: .8em;
+    min-height: 165px;
+}
+
 /* jQuery UI Select Menu */
 fieldset {
     border: 0;
@@ -188,15 +195,15 @@ body, .container {
 }
 
 .jumbotron-fluid {
-    /* background: red; */
-    /* background: url("spices.jpg"); */
-    /* background: url("food-prep.jpg"); */
-    background: url("carrots.jpg");
-
     height: 100%;
-    background-size: cover;
     color: #fff;
 }
+
+.home1 {background: url("spices.jpg"); background-size: cover;}
+.home2 {background: url("food-prep.jpg"); background-size: cover;}
+.home3 {background: url("carrots.jpg"); background-size: cover;}
+.home4 {background: url("straws.jpg"); background-size: cover;}
+
 
 .jumbotron {
     position: relative;
@@ -240,10 +247,7 @@ body, .container {
 
 
 .sub-header {
-    background: url("top-1.jpg");
-    background-position-y: bottom;
     height: 100%;
-    background-size: cover;
     color: #fff;
     position: relative;
     width: 100%;
@@ -252,6 +256,41 @@ body, .container {
     font-family: "Lato", sans-serif;
     box-shadow: 0px 0px 10px 1px #0f1316 inset;
     margin-bottom: 20px;
+}
+
+.sub-header1  {
+    background: url("top-1.jpg"); 
+    background-size: cover;
+    background-position-y: bottom;
+    background-size: cover;
+}
+
+.sub-header2  {
+    background: url("top-2.jpg"); 
+    background-size: cover;
+    background-position-y: bottom;
+    background-size: cover;
+}
+
+.sub-header3  {
+    background: url("top-3.jpg"); 
+    background-size: cover;
+    background-position-y: bottom;
+    background-size: cover;
+}
+
+.sub-header4  {
+    background: url("top-4.jpg"); 
+    background-size: cover;
+    background-position-y: bottom;
+    background-size: cover;
+}
+
+.sub-header5  {
+    background: url("top-5.jpg"); 
+    background-size: cover;
+    background-position-y: bottom;
+    background-size: cover;
 }
 
 .sub-header h2 {
@@ -280,9 +319,9 @@ body, .container {
 }
 
 .card {
-    width: 47%;
+    width: 30%;
     float: left;
-    margin: 10px 15px 0;
+    margin: 10px 17px 0;
     margin-bottom: 30px;
     /* border: 1px solid red; */
 }
@@ -311,7 +350,9 @@ h6 {
 }
 
 .card-title {
-    height: 50px;
+    /* min-height: 75px; */
+    text-transform: uppercase;
+    font-size: 1.1rem;
 }
 
 .note {
@@ -322,4 +363,13 @@ h6 {
 
 .scrape-button {
     margin: 20px 0;
+}
+
+#select-div {
+    text-align: center;
+    /* min-height: 250px; */
+}
+
+.save-button {
+    display: block;
 }

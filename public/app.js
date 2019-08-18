@@ -1,21 +1,28 @@
 $(document).ready(function () {
 
+  const jumboFluidDiv = $(".jumbotron-fluid");
+  let jumboPicArray = ["carrots.jpg", "spices.jpg", "food-prep.jpg", "straws.jpg"];
+  let random = Math.floor(Math.random() * 4) + 1;
+  console.log("Random: ", random);
+  jumboFluidDiv.addClass("home" + random);
+
+
   // Globals
+  var jumboDiv = $(".jumbotron");
   var articlesDiv = $("#articles");
   var contentTitleDiv = $('#content-title');
   var selectDiv = $('<div id="select-div">');
   var pageStateDiv = $('#page-state');
   var contentSwapDiv = $('#content-swap');
   var subHeaderDiv = $('<div class="sub-header">');
-  var jumboDiv = $(".jumbotron");
   var progressStateDiv = $('<div id="progress-state" class="alert alert-info" role="alert">');
   progressStateDiv.text(" ");
   var pageState = 0;
-  var sitesArray = [["Keto", "Description", "/scrape/keto"], ["Vegan", "Description", "/scrape/vegan"], ["Vegan-Keto", "Description", "/scrape/vegan-keto"]];
+  var sitesArray = [["Keto", "Description", "/scrape/keto"], ["Vegan", "Description", "/scrape/vegan"], ["Vegetarian-Keto", "Description", "/scrape/vegetarian-keto"]];
 
   var keto = sitesArray[0][2];
   var vegan = sitesArray[1][2];
-  var veganKeto = sitesArray[2][2];
+  var vegetarianKeto = sitesArray[2][2];
 
   // Click handler for nav
   $('.nav-link').on("click", function (event) {
@@ -37,6 +44,11 @@ $(document).ready(function () {
     progressStateDiv.removeClass("alert-success alert-info alert-warning");
     progressStateDiv.empty();
     progressStateDiv.hide();
+    let random = (Math.floor(Math.random() * 4) + 1);
+
+    subHeaderDiv.removeClass();
+    subHeaderDiv.addClass("sub-header sub-header" + random);
+
     if (pageState == 1) {
       console.log("pageState 1 stuff");
       jumboDiv.hide();
@@ -57,16 +69,16 @@ $(document).ready(function () {
   // Display scrape page stuff
   var refreshContentMain1 = function () {
     console.log("refreshContentMain1: ");
-    var scrapeButtonKeto = $('<button class="scrape-button btn btn-success" id="scrape-keto" style="margin-right: 20px;">');
+    var scrapeButtonKeto = $('<button class="scrape-button btn btn-primary" id="scrape-keto" style="margin-right: 20px;">');
     scrapeButtonKeto.val(keto);
     scrapeButtonKeto.text("Scrape Keto Recipes");
-    var scrapeButtonVegan = $('<button class="scrape-button btn btn-success" id="scrape-vegan" style="margin-right: 20px;">');
+    var scrapeButtonVegan = $('<button class="scrape-button btn btn-primary" id="scrape-vegan" style="margin-right: 20px;">');
     scrapeButtonVegan.val(vegan);
     scrapeButtonVegan.text("Scrape Vegan Recipes");
-    var scrapeButtonVeganKeto = $('<button class="scrape-button btn btn-success" id="scrape-vegan-keto" style="margin-right: 20px;">');
-    scrapeButtonVeganKeto.val(veganKeto);
-    scrapeButtonVeganKeto.text("Scrape Vegan-Keto Recipes");
-    selectDiv.append(scrapeButtonKeto, scrapeButtonVegan, scrapeButtonVeganKeto);
+    var scrapeButtonVegetarianKeto = $('<button class="scrape-button btn btn-primary" id="scrape-vegetarian-keto" style="margin-right: 20px;">');
+    scrapeButtonVegetarianKeto.val(vegetarianKeto);
+    scrapeButtonVegetarianKeto.text("Scrape Vegetarian-Keto Recipes");
+    selectDiv.append(scrapeButtonKeto, scrapeButtonVegan, scrapeButtonVegetarianKeto);
     selectDiv.slideDown("fast");
   }
 
@@ -102,8 +114,10 @@ $(document).ready(function () {
     console.log("buttonId: ", buttonId);
 
     var scrapeURL = $(this).val();
+    console.log("scrapeURL: ", scrapeURL);
 
     $.getJSON(scrapeURL, function (data, status) {
+      console.log("data: ", data);
       if (data.length > 0) {
         progressStateDiv.addClass("alert-success");
         progressStateDiv.text("Success! Scraping complete, we grabbed " + data.length + " results.");
@@ -119,59 +133,57 @@ $(document).ready(function () {
   });
 
   var displayScrapedRecipes = function (data, buttonId) {
-    console.log("data: 121212", data);
-    console.log("buttonId: 121212", buttonId);
 
     articlesDiv.empty();
+
     if (buttonId == "scrape-keto") {
-      for (let i = 0; i < data.length; i++) {
-        var img = data[i].img;
-        var title = data[i].title;
-        var link = data[i].link;
-        var tag = "Keto";
-        var card = $('<div class="card">');
-        var cardImage = $('<img class="card-img-top">');
-        cardImage.attr("src", img);
-        var cardBody = $('<div class="card-body">');
-        var cardTitleHeader = $('<h5 class="card-title">');
-        cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
-        var cardText = $('<p class="card-text">');
-        var saveButton = $('<button class="save-button btn btn-primary">');
-        saveButton.attr("data-title", title);
-        saveButton.attr("data-img", img);
-        saveButton.attr("data-link", link);
-        saveButton.attr("data-tag", tag);
-        saveButton.text("Save Recipe");
-        cardBody.append(cardTitleHeader, saveButton);
-        card.append(cardImage, cardBody);
-        articlesDiv.append(card);
-      }
-    } else {
-      console.log("Else");
+      var tag = "Keto";
+    } else if (buttonId == "scrape-vegan") {
+      var tag = "Vegan";
+    } else if (buttonId == "scrape-vegetarian-keto") {
+      var tag = "Vegetarian-Keto";
     }
-  };
 
-
-  // var displayScrapedRecipes = function (data) {
-  //   console.log("here: ", data);
-  //   articlesDiv.empty();
-  //   for (let i = 0; i < data.length; i++) {
-  //     var title = data[i].title;
-  //     var img = data[i].img;
-  //     var link = data[i].link;
-  //     var titleHeader = $('<h4 class="recipe-title">');
-  //     titleHeader.append(title);
-  //     var articleWrapDiv = $('<div class="articleWrapDiv">');
-  //     var saveButton = $('<button class="save-button btn btn-primary">');
-  //     saveButton.attr("data-title", title);
-  //     saveButton.attr("data-img", img);
-  //     saveButton.attr("data-link", link);
-  //     saveButton.text("Save Recipe");
-  //     articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
-  //     articleWrapDiv.append(saveButton);
-  //     articlesDiv.append(articleWrapDiv);
-  //   }
-  // };
+    for (let i = 0; i < data.length; i++) {
+      let img = data[i].img;
+      let title = data[i].title;
+      let link = data[i].link;
+      let description = data[i].description;
+      let card = $('<div class="card">');
+      let cardImg = $('<img class="card-img-top">');
+      cardImg.attr("src", img);
+      cardImg.attr("alt", title);
+      let cardBody = $('<div class="card-body">');
+      let cardTitle = $('<h5 class="card-title">');
+      cardTitle.text(title);
+      let cardFooter = $('<div class="card-footer">');
+      let cardUpdated = $('<small class="text-muted">');
+      cardFooter.append(cardUpdated);
+      cardBody.append(cardTitle);
+      if (description) {
+        let cardDescription = $('<p class="card-text">');
+        cardDescription.text(data[i].description);
+        cardBody.append(cardDescription);
+      }
+      let cardListGroup = $('<ul class="list-group  list-group-flush">');
+      let cardListItemLink = $('<li class="list-group-item">');
+      let cardLink = $('<a class="card-link" target="_blank">');
+      cardLink.attr("href", link);
+      cardLink.text("View Recipe");
+      cardListItemLink.append(cardLink);
+      cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
+      cardListGroup.append(cardListItemLink);
+      let saveButton = $('<button class="save-button btn btn-primary">');
+      saveButton.attr("data-title", title);
+      saveButton.attr("data-img", img);
+      saveButton.attr("data-link", link);
+      saveButton.attr("data-tag", tag);
+      saveButton.text("Save Recipe");
+      cardBody.append(saveButton);
+      card.append(cardImg, cardBody, cardListGroup, cardFooter);
+      articlesDiv.append(card);
+    }
+  }
 
   // Click handler for save button
   $('#articles').on("click", ".save-button", function (event) {
@@ -211,58 +223,68 @@ $(document).ready(function () {
         articlesDiv.html("<p>There are no saved recipes.</p>");
       } else {
         for (let i = 0; i < data.length; i++) {
-          console.log("data.title: ", data[i].title);
-          console.log("data.note: ", data[i].note);
           var img = data[i].img;
           var title = data[i].title;
           var link = data[i].link;
           var id = data[i]._id;
           var tag = data[i].tag;
-          var card = $('<div class="card">');
-          card.attr("id", id);
-          var cardImage = $('<img class="card-img-top">');
-          cardImage.attr("src", img);
-          var cardBody = $('<div class="card-body">');
-          var cardTitleHeader = $('<h5 class="card-title">');
-          cardTitleHeader.html("<a href='" + link + "' target='_blank'>" + title + "</a>");
-          var cardText = $('<p class="card-text">');
-          cardText.html("Tag: " + tag);
-          var notesButton = $('<button class="btn">');
-          notesButton.attr("id", id);
-          notesButton.attr("data-title", title);
-          notesButton.attr("data-img", img);
-          notesButton.attr("data-link", link);
-          if (data[i].note) {
-            console.log("Yes there's a note");
-            notesButton.addClass("btn-success");
-            notesButton.addClass("notes-view-button");
-            notesButton.attr("data-noteid", data[i].note);
-            notesButton.text("View Note");
-          } else {
-            notesButton.addClass("notes-button");
-            notesButton.addClass("btn-primary");
-            notesButton.text("Make a Note");
+          var description = data[i].description;
+          var tag = data[i].tag;
+
+          let card = $('<div class="card">');
+          let cardImg = $('<img class="card-img-top">');
+          cardImg.attr("src", img);
+          cardImg.attr("alt", title);
+          let cardBody = $('<div class="card-body">');
+
+          let cardTitle = $('<h5 class="card-title">');
+          cardTitle.text(title);
+
+          let cardFooter = $('<div class="card-footer">');
+          let cardUpdated = $('<small class="text-muted">');
+          cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
+          cardFooter.append(cardUpdated);
+
+          cardBody.append(cardTitle);
+          if (description) {
+            let cardDescription = $('<p class="card-text">');
+            cardDescription.text(data[i].description);
+            cardBody.append(cardDescription);
           }
-          cardBody.append(cardTitleHeader, cardText, notesButton);
-          card.append(cardImage, cardBody);
+          let cardListGroup = $('<ul class="list-group  list-group-flush">');
+          let cardListItemLink = $('<li class="list-group-item">');
+          let cardLink = $('<a class="card-link" target="_blank">');
+          cardLink.attr("href", link);
+          cardLink.text("View Recipe");
+          cardListItemLink.append(cardLink);
+          cardListGroup.append(cardListItemLink);
+          let saveButton = $('<button class="save-button btn btn-primary">');
+          saveButton.attr("data-title", title);
+          saveButton.attr("data-img", img);
+          saveButton.attr("data-link", link);
+          saveButton.attr("data-tag", tag);
+          saveButton.text("Save Recipe");
+          cardBody.append(saveButton);
+          card.append(cardImg, cardBody, cardListGroup, cardFooter);
           articlesDiv.append(card);
+
         }
       }
     });
   }
-
-
 
   // Click handler for Make a Note button
   $('#articles').on("click", ".notes-button", function (event) {
     console.log("Notes button clicky");
     var recipeDiv = $(this).parent();
     var id = $(this).attr("id");
+    var noteWrapper = $('<div class="note">');
     var titleinput = $('<input id="titleinput" class="form-control" type="text">');
     var bodyinput = $('<input id="bodyinput" class="form-control" type="text">');
     $(this).attr("disabled", "disabled");
-    var notesavebutton = $('<button class="notes-save-button" id="' + id + '">Save Note</button>');
-    recipeDiv.append(titleinput, bodyinput, notesavebutton);
+    var notesavebutton = $('<button class="notes-save-button btn btn-primary" id="' + id + '">Save Note</button>');
+    noteWrapper.append(titleinput, bodyinput, notesavebutton);
+    recipeDiv.append(noteWrapper);
   });
 
   // Click handler for View Note button

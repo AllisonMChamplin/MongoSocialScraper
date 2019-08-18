@@ -53,6 +53,44 @@ app.get("/scrape/keto", function (req, res) {
     })
 });
 
+// Scrape vegan
+// A GET route for scraping a recipe website
+app.get("/scrape/vegan", function (req, res) {
+    axios.get("https://www.shape.com/topics/vegan-recipes").then(function (response) {
+        var $ = cheerio.load(response.data);
+        var results = [];
+        $(".taxonomy-content-item").each(function (i, element) {
+            var result = {};
+            result.link = $(element).find("a.taxonomy-content-item__link").attr("href");
+            result.title = $(element).find("h5").text();
+            result.img = $(element).find("img").attr("src");
+            result.description = $(element).find(".taxonomy-content-item__description").text();
+            result.category = "Vegan";
+            results.push(result);
+        });
+        res.send(results);
+    })
+});
+
+// Scrape vegetarian-keto
+// A GET route for scraping a recipe website
+app.get("/scrape/vegetarian-keto", function (req, res) {
+    axios.get("https://www.sugarfreemom.com/recipes/category/diet/vegetarian/").then(function (response) {
+        var $ = cheerio.load(response.data);
+        var results = [];
+        $("article").each(function (i, element) {
+            var result = {};
+            result.link = $(element).find(".more-link").attr("href");
+            result.title = $(element).find(".entry-title-link").text().trim();
+            result.img = $(element).find(".post-image").attr("src");
+            result.category = "Vegetarian-Keto";
+            results.push(result);
+        });
+        res.send(results);
+    })
+});
+
+
 // Route for getting all Recipes from the db
 app.get("/recipes", function (req, res) {
     // Grab every document in the Recipes collection

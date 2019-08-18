@@ -21,6 +21,11 @@ var RecipeSchema = new Schema({
         type: String,
         required: false
     },
+    // `description` is not required and of type String
+    description: {
+        type: String,
+        required: false
+    },
     // `tag` is not required and of type String
     tag: {
         type: String,
