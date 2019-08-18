@@ -76,6 +76,7 @@ $(document).ready(function () {
     subHeaderDiv.hide();
     $(".nav-item:first-child a").addClass("active");
   };
+
   initializeContent(0);
 
 
@@ -119,43 +120,11 @@ $(document).ready(function () {
       saveButton.attr("data-img", img);
       saveButton.attr("data-link", link);
       saveButton.text("Save Recipe");
-      // var notesButton = $('<button class="notes-button btn btn-primary">');
-      // notesButton.text("Make a Note");
       articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
       articleWrapDiv.append(saveButton);
       articlesDiv.append(articleWrapDiv);
     }
   };
-
-  var displaySavedRecipes = function (data) {
-    console.log("here: ", data);
-    articlesDiv.empty();
-    var queryURL = "/recipes";
-    $.getJSON(queryURL, function (data) {
-      console.log("data.length: ", data.length);
-      if (data.length > 0) {
-        console.log("data: ", data);
-        for (let i = 0; i < data.length; i++) {
-          var title = data[i].title;
-          var img = data[i].img;
-          var link = data[i].link;
-          var id = data[i]._id;
-          var titleHeader = $('<h4 class="recipe-title">');
-          titleHeader.append(title);
-          var articleWrapDiv = $('<div class="articleWrapDiv">');
-          var notesButton = $('<button class="notes-button btn btn-primary" id="' + id + '">');
-          notesButton.attr("data-title", title);
-          notesButton.attr("data-img", img);
-          notesButton.attr("data-link", link);
-          notesButton.attr("data-id", id);
-          notesButton.text("Make a Note");
-          articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
-          articleWrapDiv.append(notesButton);
-          articlesDiv.append(articleWrapDiv);
-        }
-      }
-    });
-  }
 
   // Click handler for save button
   $('#articles').on("click", ".save-button", function (event) {
@@ -183,17 +152,90 @@ $(document).ready(function () {
       });
   });
 
-  // Click handler for notes button
+  var displaySavedRecipes = function () {
+    articlesDiv.empty();
+    var queryURL = "/recipes";
+    $.getJSON(queryURL, function (data) {
+      console.log("data.length: ", data.length);
+      if (data.length > 0) {
+        console.log("data: ", data);
+        for (let i = 0; i < data.length; i++) {
+          console.log("data.title: ", data[i].title);
+          console.log("data.note: ", data[i].note);
+          var title = data[i].title;
+          var img = data[i].img;
+          var link = data[i].link;
+          var id = data[i]._id;
+          var titleHeader = $('<h4 class="recipe-title">');
+          titleHeader.append(title);
+          var articleWrapDiv = $('<div class="articleWrapDiv">');
+          var notesButton = $('<button class="btn">');
+          notesButton.attr("id", id);
+          notesButton.attr("data-title", title);
+          notesButton.attr("data-img", img);
+          notesButton.attr("data-link", link);
+
+          if (data[i].note) {
+            console.log("Yes there's a note");
+            notesButton.addClass("btn-success");
+            notesButton.addClass("notes-view-button");
+            notesButton.attr("data-noteid", data[i].note);
+            notesButton.text("View Note");
+          } else {
+            notesButton.addClass("notes-button");
+            notesButton.addClass("btn-primary");
+            notesButton.text("Make a Note");
+          }
+
+          articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
+          articleWrapDiv.append(notesButton);
+          articlesDiv.append(articleWrapDiv);
+        }
+      }
+    });
+  }
+
+
+
+  // Click handler for Make a Note button
   $('#articles').on("click", ".notes-button", function (event) {
     console.log("Notes button clicky");
     var recipeDiv = $(this).parent();
     var titleinput = $('<input id="titleinput">');
     var bodyinput = $('<input id="bodyinput">');
     var id = $(this).attr("id");
+    $(this).attr("disabled", "disabled");
     var notesavebutton = $('<button class="notes-save-button" id="' + id + '">Save Note</button>');
     recipeDiv.append(titleinput, bodyinput, notesavebutton);
   });
 
+  // Click handler for View Note button
+  $('#articles').on("click", ".notes-view-button", function (event) {
+    console.log("Notes view button clicky");
+    $(this).attr("disabled", "disabled");
+
+    var recipeDiv = $(this).parent();
+    var noteDiv = $('<div class="note-display">');
+    var noteId = $(this).attr("data-noteid");
+
+    // Grab the notes from the db as a json
+    var queryURL = "/notes/" + noteId;
+    console.log("queryURL: ", queryURL);
+    $.getJSON(queryURL, function (data) {
+      console.log("data", data);
+      if (data) {
+        console.log("Notes data: ", data);
+        var note = $('<div class="note">');
+        var noteTitle = data.title;
+        var noteBody = data.body;
+        note.html("<h4>Note:</h4>" + "<p>" + noteTitle + "</p><p>" + noteBody + "</p>");
+        recipeDiv.append(note);
+      } else {
+        console.log("No data", data);
+      }
+    });
+    // recipeDiv.append(noteDiv);
+  });
 
   // Click handler for save note button
   $('#articles').on("click", ".notes-save-button", function (event) {
@@ -202,22 +244,23 @@ $(document).ready(function () {
     var id = $(this).attr("id");
     var title = $("#titleinput").val();
     var body = $("#bodyinput").val();
+    var data = { title: title, body: body, recipeid: id };
+    console.log("data: ", data);
+
     // Run a POST request to add a note, using what's entered in the inputs
     $.ajax({
       method: "POST",
       url: "/recipes/" + id,
-      data: {
-        title: title,
-        body: body
-      }
+      data: data
     })
       // With that done
       .then(function (data) {
         // Log the response
-        console.log(data);
+        console.log("postdata: ", data);
         button.text("Saved note!");
         button.attr("disabled", "disabled");
       });
-    // recipeDiv.append();
   });
+
+
 });
