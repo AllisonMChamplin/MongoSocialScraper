@@ -145,43 +145,45 @@ $(document).ready(function () {
     }
 
     for (let i = 0; i < data.length; i++) {
-      let img = data[i].img;
       let title = data[i].title;
-      let link = data[i].link;
-      let description = data[i].description;
-      let card = $('<div class="card">');
-      let cardImg = $('<img class="card-img-top">');
-      cardImg.attr("src", img);
-      cardImg.attr("alt", title);
-      let cardBody = $('<div class="card-body">');
-      let cardTitle = $('<h5 class="card-title">');
-      cardTitle.text(title);
-      let cardFooter = $('<div class="card-footer">');
-      let cardUpdated = $('<small class="text-muted">');
-      cardFooter.append(cardUpdated);
-      cardBody.append(cardTitle);
-      if (description) {
-        let cardDescription = $('<p class="card-text">');
-        cardDescription.text(data[i].description);
-        cardBody.append(cardDescription);
+      if (title != "") {
+        let img = data[i].img;
+        let link = data[i].link;
+        let description = data[i].description;
+        let card = $('<div class="card">');
+        let cardImg = $('<img class="card-img-top">');
+        cardImg.attr("src", img);
+        cardImg.attr("alt", title);
+        let cardBody = $('<div class="card-body">');
+        let cardTitle = $('<h5 class="card-title">');
+        cardTitle.text(title);
+        let cardFooter = $('<div class="card-footer">');
+        let cardUpdated = $('<small class="text-muted">');
+        cardFooter.append(cardUpdated);
+        cardBody.append(cardTitle);
+        if (description) {
+          let cardDescription = $('<p class="card-text">');
+          cardDescription.text(data[i].description);
+          cardBody.append(cardDescription);
+        }
+        let cardListGroup = $('<ul class="list-group  list-group-flush">');
+        let cardListItemLink = $('<li class="list-group-item">');
+        let cardLink = $('<a class="card-link" target="_blank">');
+        cardLink.attr("href", link);
+        cardLink.text("View Recipe");
+        cardListItemLink.append(cardLink);
+        cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
+        cardListGroup.append(cardListItemLink);
+        let saveButton = $('<button class="save-button btn btn-primary">');
+        saveButton.attr("data-title", title);
+        saveButton.attr("data-img", img);
+        saveButton.attr("data-link", link);
+        saveButton.attr("data-tag", tag);
+        saveButton.text("Save Recipe");
+        cardBody.append(saveButton);
+        card.append(cardImg, cardBody, cardListGroup, cardFooter);
+        articlesDiv.append(card);
       }
-      let cardListGroup = $('<ul class="list-group  list-group-flush">');
-      let cardListItemLink = $('<li class="list-group-item">');
-      let cardLink = $('<a class="card-link" target="_blank">');
-      cardLink.attr("href", link);
-      cardLink.text("View Recipe");
-      cardListItemLink.append(cardLink);
-      cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
-      cardListGroup.append(cardListItemLink);
-      let saveButton = $('<button class="save-button btn btn-primary">');
-      saveButton.attr("data-title", title);
-      saveButton.attr("data-img", img);
-      saveButton.attr("data-link", link);
-      saveButton.attr("data-tag", tag);
-      saveButton.text("Save Recipe");
-      cardBody.append(saveButton);
-      card.append(cardImg, cardBody, cardListGroup, cardFooter);
-      articlesDiv.append(card);
     }
   }
 
@@ -223,8 +225,8 @@ $(document).ready(function () {
         articlesDiv.html("<p>There are no saved recipes.</p>");
       } else {
         for (let i = 0; i < data.length; i++) {
-          var img = data[i].img;
           var title = data[i].title;
+          var img = data[i].img;
           var link = data[i].link;
           var id = data[i]._id;
           var tag = data[i].tag;
@@ -258,14 +260,24 @@ $(document).ready(function () {
           cardLink.text("View Recipe");
           cardListItemLink.append(cardLink);
           cardListGroup.append(cardListItemLink);
-          let saveButton = $('<button class="save-button btn btn-primary">');
-          saveButton.attr("data-title", title);
-          saveButton.attr("data-img", img);
-          saveButton.attr("data-link", link);
-          saveButton.attr("data-tag", tag);
-          saveButton.text("Save Recipe");
-          cardBody.append(saveButton);
-          card.append(cardImg, cardBody, cardListGroup, cardFooter);
+
+          let notesButton = $('<button class="btn">');
+          notesButton.attr("id", id);
+          notesButton.attr("data-title", title);
+          notesButton.attr("data-img", img);
+          notesButton.attr("data-link", link);
+          if (data[i].note) {
+            console.log("Yes there's a note");
+            notesButton.addClass("btn-success");
+            notesButton.addClass("notes-view-button");
+            notesButton.attr("data-noteid", data[i].note);
+            notesButton.text("View Note");
+          } else {
+            notesButton.addClass("notes-button");
+            notesButton.addClass("btn-primary");
+            notesButton.text("Make a Note");
+          }
+          card.append(cardImg, cardBody, cardListGroup, cardFooter, notesButton);
           articlesDiv.append(card);
 
         }
@@ -279,11 +291,13 @@ $(document).ready(function () {
     var recipeDiv = $(this).parent();
     var id = $(this).attr("id");
     var noteWrapper = $('<div class="note">');
+    let noteText = $('<p class="card-text">');
+    noteText.text("Recipe notes:");
     var titleinput = $('<input id="titleinput" class="form-control" type="text">');
     var bodyinput = $('<input id="bodyinput" class="form-control" type="text">');
     $(this).attr("disabled", "disabled");
     var notesavebutton = $('<button class="notes-save-button btn btn-primary" id="' + id + '">Save Note</button>');
-    noteWrapper.append(titleinput, bodyinput, notesavebutton);
+    noteWrapper.append(noteText, titleinput, bodyinput, notesavebutton);
     recipeDiv.append(noteWrapper);
   });
 
@@ -304,9 +318,18 @@ $(document).ready(function () {
       if (data) {
         console.log("Notes data: ", data);
         var note = $('<div class="note">');
+
         var noteTitle = data.title;
+        let noteTitleP = $('<p>' + noteTitle + '</p>');
+        // noteTitleP.text(noteTitle);
+
         var noteBody = data.body;
-        note.html("<h4>Note:</h4>" + "<p>" + noteTitle + "</p><p>" + noteBody + "</p>");
+        let noteBodyP = $('<p>' + noteBody + '</p>');
+
+        let noteText = $('<p class="card-text">Recipe notes:</p>');
+        // noteText.text("Recipe notes:");
+        // noteBodyP.text(noteBody);
+        note.append(noteText, noteTitleP, noteBodyP);
         recipeDiv.append(note);
       } else {
         console.log("No data", data);

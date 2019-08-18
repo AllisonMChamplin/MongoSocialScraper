@@ -357,7 +357,7 @@ h6 {
 
 .note {
     margin: 20px 0;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     padding: 20px;
 }
 
@@ -372,4 +372,8 @@ h6 {
 
 .save-button {
     display: block;
+}
+
+.note input {
+    margin: 5px 0;
 }
