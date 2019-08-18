@@ -11,7 +11,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+// var PORT = 3000;
 
 // Initialize Express
 var app = express();
@@ -249,7 +249,12 @@ app.post("/clear", function (req, res) {
 });
 
 
-// Start the server
-app.listen(PORT, function () {
-    console.log("App running on port " + PORT + "!");
+// // Start the server
+// app.listen(PORT, function () {
+//     console.log("App running on port " + PORT + "!");
+// });
+
+
+app.listen(process.env.PORT || 3000, function () {
+    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
