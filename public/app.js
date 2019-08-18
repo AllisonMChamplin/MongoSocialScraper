@@ -243,7 +243,7 @@ $(document).ready(function () {
       if (data.length == 0) {
         articlesDiv.html("<p>There are no saved recipes.</p>");
       } else {
-        articlesDiv.html("<p>There are " + data.length + " saved recipes.</p>");
+        articlesDiv.html("<p>There are " + data.length + " saved recipes.</p>" + "<button class='btn btn-primary' id='delete-recipes'>Clear Recipes</button>");
 
         var savedWrap = $('<div class="savedWrap">');
 
@@ -388,5 +388,24 @@ $(document).ready(function () {
       });
   });
 
+  // Click handler for delete button
+  $('#articles').on("click", "#delete-recipes", function (event) {
+    console.log("Clear button clicky");
+    // Run a POST request to add a note, using what's entered in the inputs
+    $.ajax({
+      method: "POST",
+      url: "/clear"
+    })
+      // With that done
+      .then(function (data) {
+        // Log the response
+        console.log("clear result: ", data);
+        if (data == 'Deleted') {
+          pageState == 2;
+          refreshContentMain2(pageState);
+        };
+      });
+
+  });
 
 });

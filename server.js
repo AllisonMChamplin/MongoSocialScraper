@@ -26,12 +26,21 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
+
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/mongoSocialScraper", { useNewUrlParser: true });
+// mongoose.connect("mongodb://localhost/mongoSocialScraper", { useNewUrlParser: true });
+
+// If deployed, use the deployed database. Otherwise use the local database
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoSocialScraper";
+
+mongoose.connect(MONGODB_URI);
+
+
+
+
+
 
 // Routes
-
-
 
 // Scrape keto
 // A GET route for scraping a recipe website
@@ -217,6 +226,27 @@ app.post("/recipes/:id", function (req, res) {
 });
 
 
+
+// Route for clearing database
+app.post("/clear", function (req, res) {
+    db.Recipe.deleteMany({
+    }).then(function (dbNote) {
+        return dbNote;
+    }).catch(function (err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+    });
+
+    db.Note.deleteMany({
+    }).then(function (dbNote) {
+        return dbNote;
+    }).catch(function (err) {
+        // If an error occurred, send it to the client
+        res.json(err);
+    });
+    res.send("Deleted");
+    res.end();
+});
 
 
 // Start the server
