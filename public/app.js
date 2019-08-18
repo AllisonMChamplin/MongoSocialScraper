@@ -286,7 +286,13 @@ $(document).ready(function () {
           cardLink.attr("href", link);
           cardLink.text("View Recipe");
           cardListItemLink.append(cardLink);
-          cardListGroup.append(cardListItemLink);
+          
+          let tagList = $('<li class="list-group-item">');
+          let cardUpdated = $('<small class="text-muted">');
+          cardUpdated.append('Tags: <span class="badge badge-info">' + tag + '</span>');
+          tagList.append(cardUpdated);
+          cardListGroup.append(cardListItemLink, tagList);
+          
 
           let notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
