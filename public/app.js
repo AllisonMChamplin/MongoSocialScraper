@@ -162,14 +162,32 @@ $(document).ready(function () {
         for (let i = 0; i < data.length; i++) {
           console.log("data.title: ", data[i].title);
           console.log("data.note: ", data[i].note);
-          var title = data[i].title;
+
+          //           <div class="card" style="width: 18rem;">
+          //             <img src="..." class="card-img-top" alt="...">
+          //               <div class="card-body">
+          //                 <h5 class="card-title">Card title</h5>
+          //                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          //                 <a href="#" class="btn btn-primary">Go somewhere</a>
+          //               </div>
+          //            </div>
+
+
+
           var img = data[i].img;
+          var title = data[i].title;
           var link = data[i].link;
           var id = data[i]._id;
-          var titleHeader = $('<h4 class="recipe-title">');
-          titleHeader.append(title);
-          var articleWrapDiv = $('<div class="articleWrapDiv">');
-          articleWrapDiv.attr("id", id);
+
+          var card = $('<div class="card">');
+          card.attr("id", id);
+          var cardImage = $('<img class="card-img-top">');
+          cardImage.attr("src", img);
+          var cardBody = $('<div class="card-body">');
+          var cardTitleHeader = $('<h5 class="card-title">');
+          cardTitleHeader.text(title);
+          var cardText = $('<p class="card-text">');
+
           var notesButton = $('<button class="btn">');
           notesButton.attr("id", id);
           notesButton.attr("data-title", title);
@@ -188,9 +206,14 @@ $(document).ready(function () {
             notesButton.text("Make a Note");
           }
 
-          articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
-          articleWrapDiv.append(notesButton);
-          articlesDiv.append(articleWrapDiv);
+          // articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
+          // articleWrapDiv.append(notesButton);
+          // articlesDiv.append(articleWrapDiv);
+
+          cardBody.append(cardTitleHeader, notesButton);
+          card.append(cardImage, cardBody);
+          articlesDiv.append(card);
+
         }
       }
     });
