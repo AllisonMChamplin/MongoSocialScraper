@@ -139,13 +139,15 @@ $(document).ready(function () {
           var title = data[i].title;
           var img = data[i].img;
           var link = data[i].link;
+          var id = data[i]._id;
           var titleHeader = $('<h4 class="recipe-title">');
           titleHeader.append(title);
           var articleWrapDiv = $('<div class="articleWrapDiv">');
-          var notesButton = $('<button class="notes-button btn btn-primary">');
+          var notesButton = $('<button class="notes-button btn btn-primary" id="' + id + '">');
           notesButton.attr("data-title", title);
           notesButton.attr("data-img", img);
           notesButton.attr("data-link", link);
+          notesButton.attr("data-id", id);
           notesButton.text("Make a Note");
           articleWrapDiv.html('<h4 class="recipe-title">' + title + '</h4>' + '<img src="' + img + '" />' + '<a href="' + link + '" target="_blank">View Recipe</a>');
           articleWrapDiv.append(notesButton);
@@ -162,7 +164,7 @@ $(document).ready(function () {
     var title = $(this).attr("data-title");
     var img = $(this).attr("data-img");
     var link = $(this).attr("data-link");
-    // Run a POST request to change the note, using what's entered in the inputs
+    // Run a POST request to save the recipe
     $.ajax({
       method: "POST",
       url: "/recipes/save",
@@ -184,7 +186,38 @@ $(document).ready(function () {
   // Click handler for notes button
   $('#articles').on("click", ".notes-button", function (event) {
     console.log("Notes button clicky");
+    var recipeDiv = $(this).parent();
+    var titleinput = $('<input id="titleinput">');
+    var bodyinput = $('<input id="bodyinput">');
+    var id = $(this).attr("id");
+    var notesavebutton = $('<button class="notes-save-button" id="' + id + '">Save Note</button>');
+    recipeDiv.append(titleinput, bodyinput, notesavebutton);
   });
 
 
+  // Click handler for save note button
+  $('#articles').on("click", ".notes-save-button", function (event) {
+    console.log("Notes save button clicky");
+    var button = $(this);
+    var id = $(this).attr("id");
+    var title = $("#titleinput").val();
+    var body = $("#bodyinput").val();
+    // Run a POST request to add a note, using what's entered in the inputs
+    $.ajax({
+      method: "POST",
+      url: "/recipes/" + id,
+      data: {
+        title: title,
+        body: body
+      }
+    })
+      // With that done
+      .then(function (data) {
+        // Log the response
+        console.log(data);
+        button.text("Saved note!");
+        button.attr("disabled", "disabled");
+      });
+    // recipeDiv.append();
+  });
 });
