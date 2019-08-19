@@ -18,11 +18,11 @@ $(document).ready(function () {
   var progressStateDiv = $('<div id="progress-state" class="alert alert-info" role="alert">');
   progressStateDiv.text(" ");
   var pageState = 0;
-  var sitesArray = [["Keto", "Description", "/scrape/keto"], ["Vegan", "Description", "/scrape/vegan"], ["Vegetarian-Keto", "Description", "/scrape/vegetarian-keto"]];
+  var sitesArray = [["Keto", "Description", "/scrape/keto"], ["Vegan", "Description", "/scrape/vegan"], ["Popular", "Description", "/scrape/popular"]];
 
   var keto = sitesArray[0][2];
   var vegan = sitesArray[1][2];
-  var vegetarianKeto = sitesArray[2][2];
+  var popular = sitesArray[2][2];
 
   // Click handler for nav
   $('.nav-link').on("click", function (event) {
@@ -71,14 +71,14 @@ $(document).ready(function () {
     console.log("refreshContentMain1: ");
     var scrapeButtonKeto = $('<button class="scrape-button btn btn-primary" id="scrape-keto" style="margin-right: 20px;">');
     scrapeButtonKeto.val(keto);
-    scrapeButtonKeto.text("Scrape Keto Recipes");
+    scrapeButtonKeto.text("Keto Recipes");
     var scrapeButtonVegan = $('<button class="scrape-button btn btn-primary" id="scrape-vegan" style="margin-right: 20px;">');
     scrapeButtonVegan.val(vegan);
-    scrapeButtonVegan.text("Scrape Vegan Recipes");
-    var scrapeButtonVegetarianKeto = $('<button class="scrape-button btn btn-primary" id="scrape-vegetarian-keto" style="margin-right: 20px;">');
-    scrapeButtonVegetarianKeto.val(vegetarianKeto);
-    scrapeButtonVegetarianKeto.text("Scrape Vegetarian-Keto Recipes");
-    selectDiv.append(scrapeButtonKeto, scrapeButtonVegan, scrapeButtonVegetarianKeto);
+    scrapeButtonVegan.text("Vegan Recipes");
+    var scrapeButtonPopular = $('<button class="scrape-button btn btn-primary" id="scrape-popular" style="margin-right: 20px;">');
+    scrapeButtonPopular.val(popular);
+    scrapeButtonPopular.text("Popular Food.com Recipes");
+    selectDiv.append(scrapeButtonKeto, scrapeButtonVegan, scrapeButtonPopular);
     selectDiv.slideDown("fast");
   }
 
@@ -140,8 +140,8 @@ $(document).ready(function () {
       var tag = "Keto";
     } else if (buttonId == "scrape-vegan") {
       var tag = "Vegan";
-    } else if (buttonId == "scrape-vegetarian-keto") {
-      var tag = "Vegetarian-Keto";
+    } else if (buttonId == "scrape-popular") {
+      var tag = "Popular";
     }
 
     for (let i = 0; i < data.length; i++) {
@@ -178,7 +178,7 @@ $(document).ready(function () {
         cardLink.attr("href", link);
         cardLink.text("View Recipe");
         cardListItemLink.append(cardLink);
-        cardUpdated.append('Tags: <span class="keto badge badge-info">' + tag + '</span>');
+        cardUpdated.append('Tags: <span class="badge badge-info">' + tag + '</span>');
         cardListGroup.append(cardListItemLink);
         let saveButton = $('<button class="save-button btn btn-primary">');
         saveButton.attr("data-title", title);
@@ -198,13 +198,31 @@ $(document).ready(function () {
     console.log("Save button clicky");
     var button = $(this);
     var title = $(this).attr("data-title");
+    console.log("Click Title: ", title);
+
+
     var img = $(this).attr("data-img");
     var link = $(this).attr("data-link");
     var tag = $(this).attr("data-tag");
 
+    // var queryUrl = "/recipes/title/" + title;
+    var queryUrl = "/recipes/title/";
+
+    console.log("queryUrl: ", queryUrl);
+    // queryUrl = encodeURI(queryUrl);
+    // console.log("queryUrl: ", queryUrl);
+    // return;
+
+
     $.ajax({
       method: "GET",
-      url: "/recipes/" + title
+      url: queryUrl,
+      data: {
+        title: title,
+        img: img,
+        link: link,
+        tag: tag
+      }
     }).then(function (data) {
       // Log the response
       console.log("promise1data", data);
@@ -225,14 +243,14 @@ $(document).ready(function () {
           // With that done
           .then(function (data) {
             // Log the response
-            console.log(data);
+            console.log("post promise data: ", data);
             button.text("Saved!");
             button.attr("disabled", "disabled");
           });
 
       } else {
-        console.log("disable save button");
-        button.text("Recipe Already Saved!");
+        console.log("Found title in db, disable save button");
+        button.text("Duplicate!");
         button.attr("disabled", "disabled");
       }
     });

@@ -81,29 +81,30 @@ app.get("/scrape/vegan", function (req, res) {
     })
 });
 
-// Scrape vegetarian-keto
+// Scrape Food.com
 // A GET route for scraping a recipe website
-app.get("/scrape/vegetarian-keto", function (req, res) {
-    axios.get("https://www.sugarfreemom.com/recipes/category/diet/vegetarian/").then(function (response) {
+app.get("/scrape/popular", function (req, res) {
+    axios.get("https://www.food.com/ideas/most-saved-recipes-6799?c=667794").then(function (response) {
         var $ = cheerio.load(response.data);
         var results = [];
-        $("article").each(function (i, element) {
+        $(".smart-card").each(function (i, element) {
             var result = {};
-            result.link = $(element).find(".more-link").attr("href");
-            result.title = $(element).find(".entry-title-link").text().trim();
-            result.img = $(element).find(".post-image").attr("src");
-            result.category = "Vegetarian-Keto";
+            result.title = $(element).find("h2.title").text().trim();
+            result.link = $(element).find("h2.title").find("a").attr("href");
+            result.img = $(element).find(".smart-photo-inner").find("img").attr("data-src");
+            // console.log("result.img: ", result.img);
+            result.category = "Popular";
             results.push(result);
         });
         res.send(results);
     })
 });
 
-
+// db.getCollection('').find({}).sort({_id:-1}) 
 // Route for getting all Recipes from the db
 app.get("/recipes", function (req, res) {
     // Grab every document in the Recipes collection
-    db.Recipe.find({})
+    db.Recipe.find({}).sort({_id:-1})
         .then(function (dbRecipe) {
             // If we were able to successfully find Recipes, send them back to the client
             res.json(dbRecipe);
@@ -115,8 +116,10 @@ app.get("/recipes", function (req, res) {
 });
 
 // Route for checking if reipe alrady is saved
-app.get("/recipes/:title", function (req, res) {
-    console.log("HERE", req.params.title);
+app.get("/recipes/title", function (req, res) {
+    // console.log("HERE", req.params.title);
+    console.log("HERE", req.body.title);
+
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     db.Recipe.findOne({ title: req.params.title })
         .then(function (dbRecipe) {
