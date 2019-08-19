@@ -381,6 +381,7 @@ h6 {
 .saved-card-img {
     float: right;
     width: 200px;
+    margin-bottom: 15px;
 }
 
 .savedWrap .card {
@@ -391,7 +392,55 @@ h6 {
     min-height: 300px;
 }
 
-.saved-card-img {
-    float: right;
-    width: 159px !important;
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .card-body {
+        min-height: 200px !important;
+    }
+
+    .savedWrap .card-body {
+        min-height: 400px !important;
+    }
+    
+    .card {
+        width: 45%;
+        float: left;
+        margin: 16px;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) { 
+    .card {
+        width: 100%;
+        float: none;
+        margin: 0 0 20px;
+    }
+
+    #articles {
+        margin: 0;
+        padding: 0;
+    }
+
+    .savedWrap .card {
+        width: 100%;
+        margin: 20px 0;
+    }
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) { 
+    .savedWrap .card {
+        width: 100%;
+        margin: 20px 0 0 0;
+        padding: 0;
+    }
+    .card {
+        width: 100%;
+        float: none;
+        margin: 20px 0 0;
+    }
+    .jumbotron {        
+        background-position-x: center;
+    }
 }
