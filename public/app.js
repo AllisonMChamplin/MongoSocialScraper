@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
   const jumboFluidDiv = $(".jumbotron-fluid");
-  let jumboPicArray = ["carrots.jpg", "spices.jpg", "food-prep.jpg", "straws.jpg"];
-  let random = Math.floor(Math.random() * 4) + 1;
+  let jumboPicArray = ["spoon.jpg", "spices.jpg", "food-prep.jpg"];
+  let random = Math.floor(Math.random() * 3) + 1;
   console.log("Random: ", random);
   jumboFluidDiv.addClass("home" + random);
 
